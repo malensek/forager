@@ -22,19 +22,9 @@ public class Forager implements MessageListener {
     throws IOException {
         messageRouter = new ClientMessageRouter();
         messageRouter.addListener(this);
-        System.out.println("conn");
         messageRouter.connectTo(overlord);
-        System.out.println("done");
-        try {
-        Thread.sleep(2000);
-        } catch (InterruptedException e) { }
-        System.out.println("sending1");
-        messageRouter.sendMessage(overlord, new GalileoMessage("hello".getBytes()));
-        try {
-        Thread.sleep(2000);
-        } catch (InterruptedException e) { }
-        System.out.println("sending2");
-        messageRouter.sendMessage(overlord, new GalileoMessage("hello!".getBytes()));
+
+        /* Join the network */
     }
 
     @Override
@@ -44,21 +34,7 @@ public class Forager implements MessageListener {
 
     @Override
     public void onDisconnect(NetworkDestination endpoint) {
-        System.out.println("x");
-        if (once == false) {
-            once = true;
-
-            System.out.println("ooo");
-            try {
-                Thread.sleep(1000);
-                //messageRouter = new ClientMessageRouter();
-                messageRouter.connectTo(overlord);
-                System.out.println("y");
-        messageRouter.sendMessage(overlord, new GalileoMessage("hello".getBytes()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+        //TODO: auto reconnect
     }
 
     @Override
@@ -79,6 +55,5 @@ public class Forager implements MessageListener {
 
         Forager forager = new Forager(overlord);
         forager.start();
-        System.out.println("done");
     }
 }
