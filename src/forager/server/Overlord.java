@@ -1,24 +1,39 @@
 
 package forager.server;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.nio.channels.SocketChannel;
+
+import forager.events.ForagerEventType;
+import forager.events.JoinEvent;
+
+import galileo.event.Event;
+import galileo.event.EventHandler;
+import galileo.event.EventType;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
 import galileo.net.ServerMessageRouter;
+import galileo.serialization.SerializationInputStream;
 
 public class Overlord implements MessageListener {
 
     private int port;
     private ServerMessageRouter messageRouter;
 
+    private EventMapper eventMapper = new EventMapper(this);
+
     public Overlord(int port) {
         this.port = port;
+        eventMapper.linkEventHandlers();
     }
 
     public void start()
-    throws IOException {
+    throws IOException, Exception {
         messageRouter = new ServerMessageRouter(3333);
         messageRouter.addListener(this);
         messageRouter.listen();
@@ -36,8 +51,21 @@ public class Overlord implements MessageListener {
 
     @Override
     public void onMessage(GalileoMessage message) {
-        System.out.println("Got a message: " + new String(message.getPayload()));
+        SerializationInputStream in = new SerializationInputStream(
+                new ByteArrayInputStream(message.getPayload()));
+        int type = 0;
+        try {
+        type = in.readInt();
+        } catch (IOException e) { }
+        System.out.println(ForagerEventType.fromInt(type));
+        System.out.println(
+                ((SocketChannel) message.getSelectionKey().channel()).socket().getInetAddress().getHostName());
+    }
 
+    @EventHandler
+    public void processJoinEvent(JoinEvent join) {
+
+        System.out.println("hello world!");
     }
 
     public static void main(String[] args)
