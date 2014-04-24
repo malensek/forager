@@ -3,6 +3,9 @@ package forager.client;
 
 import java.io.IOException;
 
+import forager.events.JoinEvent;
+
+import galileo.event.EventWrapper;
 import galileo.net.ClientMessageRouter;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
@@ -12,7 +15,6 @@ public class Forager implements MessageListener {
 
     private NetworkDestination overlord;
     private ClientMessageRouter messageRouter;
-    private boolean once = false;
 
     public Forager(NetworkDestination overlord) {
         this.overlord = overlord;
@@ -25,6 +27,8 @@ public class Forager implements MessageListener {
         messageRouter.connectTo(overlord);
 
         /* Join the network */
+        JoinEvent join = new JoinEvent();
+        messageRouter.sendMessage(overlord, EventWrapper.wrap(join));
     }
 
     @Override
