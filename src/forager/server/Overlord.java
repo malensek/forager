@@ -35,7 +35,7 @@ public class Overlord implements MessageListener {
 
     public void start()
     throws IOException, Exception {
-        messageRouter = new ServerMessageRouter(3333);
+        messageRouter = new ServerMessageRouter(this.port);
         messageRouter.addListener(this);
         messageRouter.listen();
     }
