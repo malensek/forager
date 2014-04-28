@@ -18,6 +18,10 @@ public class JoinEvent implements Event {
         this.resourceName = resourceName;
     }
 
+    public String getResourceName() {
+        return resourceName;
+    }
+
     public EventTypeMap getTypeMap() {
         return ForagerEventType.Join;
     }
