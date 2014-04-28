@@ -5,7 +5,7 @@ import forager.server.EventMap;
 
 public class ForagerEventMap extends EventMap {
 
-    static {
+    public ForagerEventMap() {
         addMapping(1, JoinEvent.class);
     }
 }
