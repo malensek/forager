@@ -4,7 +4,7 @@ package forager.server;
 import java.util.HashMap;
 import java.util.Map;
 
-public class EventMap {
+public abstract class EventMap {
 
     protected static final Map<Integer, Class<?>> intToClass = new HashMap<>();
     protected static final Map<Class<?>, Integer> classToInt = new HashMap<>();
