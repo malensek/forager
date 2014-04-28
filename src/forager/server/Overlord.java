@@ -25,7 +25,8 @@ public class Overlord implements MessageListener {
     private int port;
     private ServerMessageRouter messageRouter;
 
-    private EventMapper eventMapper = new EventMapper(this);
+    private ForagerEventMap eventMap = new ForagerEventMap();
+    private EventMapper eventMapper = new EventMapper(this, eventMap);
 
     public Overlord(int port) {
         this.port = port;
@@ -50,17 +51,7 @@ public class Overlord implements MessageListener {
     }
 
     @Override
-    public void onMessage(GalileoMessage message) {
-        SerializationInputStream in = new SerializationInputStream(
-                new ByteArrayInputStream(message.getPayload()));
-        int type = 0;
-        try {
-        type = in.readInt();
-        } catch (IOException e) { }
-        System.out.println(ForagerEventType.fromInt(type));
-        System.out.println(
-                ((SocketChannel) message.getSelectionKey().channel()).socket().getInetAddress().getHostName());
-    }
+    public void onMessage(GalileoMessage message) { }
 
     @EventHandler
     public void processJoinEvent(JoinEvent join) {
