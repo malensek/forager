@@ -8,7 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.channels.SocketChannel;
 
-import forager.events.ForagerEventType;
+import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
 import galileo.event.Event;
