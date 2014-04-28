@@ -1,5 +1,5 @@
 
-package forager.server;
+package forager.events;
 
 public class ForagerEventMap extends EventMap {
 
