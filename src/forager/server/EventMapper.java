@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import forager.events.ForagerEventType;
-
 import galileo.event.Event;
 import galileo.event.EventHandler;
 import galileo.event.EventTypeMap;
@@ -23,6 +21,7 @@ import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
 import galileo.serialization.SerializationInputStream;
+import galileo.serialization.Serializer;
 
 public class EventMapper implements MessageListener {
 
@@ -39,11 +38,7 @@ public class EventMapper implements MessageListener {
         this.handlerClass = handlerObject.getClass();
         this.handlerObject = handlerObject;
         this.eventMap = eventMap;
-        System.out.println(EventMap.getClass(1));
-    }
-
-    public <T extends Event> void map(EventTypeMap typeMap, Class<T> type) {
-
+        System.out.println(eventMap.getClass(1));
     }
 
     public void linkEventHandlers() {
@@ -96,8 +91,9 @@ public class EventMapper implements MessageListener {
         int type = 0;
         try {
         type = in.readInt();
-        } catch (IOException e) { }
-        System.out.println(ForagerEventType.fromInt(type));
+        Event e = Serializer.deserializeFromStream(eventMap.getClass(type), in);
+        classToMethod.get(eventMap.getClass(type)).invoke(handlerObject, e);
+        } catch (Exception e) { }
         System.out.println(
                 ((SocketChannel) message.getSelectionKey().channel()).socket().getInetAddress().getHostName());
     }
