@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.nio.channels.SocketChannel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
@@ -21,6 +23,8 @@ import galileo.net.ServerMessageRouter;
 import galileo.serialization.SerializationInputStream;
 
 public class Overlord implements MessageListener {
+
+    private static final Logger logger = Logger.getLogger("forager");
 
     private int port;
     private ServerMessageRouter messageRouter;
@@ -37,6 +41,7 @@ public class Overlord implements MessageListener {
     throws IOException, Exception {
         messageRouter = new ServerMessageRouter(this.port);
         messageRouter.addListener(this);
+        messageRouter.addListener(eventMapper);
         messageRouter.listen();
     }
 
@@ -55,8 +60,7 @@ public class Overlord implements MessageListener {
 
     @EventHandler
     public void processJoinEvent(JoinEvent join) {
-
-        System.out.println("hello world!");
+        logger.log(Level.INFO, "Received join request: {0}", "xxx");
     }
 
     public static void main(String[] args)
