@@ -1,8 +1,8 @@
 
 package forager.server;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -86,16 +86,26 @@ public class EventMapper implements MessageListener {
 
     @Override
     public void onMessage(GalileoMessage message) {
-        SerializationInputStream in = new SerializationInputStream(
-                new ByteArrayInputStream(message.getPayload()));
-        int type = 0;
-        try {
-        type = in.readInt();
-        Event e = Serializer.deserializeFromStream(eventMap.getClass(type), in);
-        classToMethod.get(eventMap.getClass(type)).invoke(handlerObject, e);
-        } catch (Exception e) { }
-        System.out.println(
-                ((SocketChannel) message.getSelectionKey().channel()).socket().getInetAddress().getHostName());
-    }
+        ByteArrayInputStream byteIn
+            = new ByteArrayInputStream(message.getPayload());
+        BufferedInputStream buffIn = new BufferedInputStream(byteIn);
+        SerializationInputStream in = new SerializationInputStream(buffIn);
 
+        try {
+            int type = in.readInt();
+            Class<? extends Event> clazz = eventMap.getClass(type);
+            if (clazz == null) {
+                logger.log(Level.WARNING,
+                        "Class mapping for event type {0} not found!", type);
+                in.close();
+                return;
+            }
+            Event e = Serializer.deserializeFromStream(clazz, in);
+            Method m = classToMethod.get(clazz);
+            m.invoke(handlerObject, e);
+            in.close();
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Error handling incoming message", e);
+        }
+    }
 }
