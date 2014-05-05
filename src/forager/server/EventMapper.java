@@ -96,6 +96,49 @@ public class EventMapper implements MessageListener {
 
         return parameters[0];
     }
+
+    /**
+     * Retrieves the next message from the queue, and calls the appropriate
+     * event handler method to process the message.  If no message is present in
+     * the queue, this method will block until one becomes available.
+     *
+     * @throws EventException when the incoming event is unknown, or errors
+     * occur while trying to call the appropriate handler method
+     * @throws InterruptedException if the calling thread is interrupted while
+     * waiting for a new message to arrive
+     */
+    public void processNextEvent() throws EventException, IOException,
+            InterruptedException, SerializationException {
+
+        GalileoMessage message = messageQueue.take();
+        ByteArrayInputStream byteIn
+            = new ByteArrayInputStream(message.getPayload());
+        BufferedInputStream buffIn = new BufferedInputStream(byteIn);
+        SerializationInputStream in = new SerializationInputStream(buffIn);
+
+        try {
+            int type = in.readInt();
+            Class<? extends Event> clazz = eventMap.getClass(type);
+            if (clazz == null) {
+                in.close();
+                throw new EventException(
+                        "Class mapping for event type not found!");
+            }
+
+            Event e = Serializer.deserializeFromStream(clazz, in);
+            Method m = classToMethod.get(clazz);
+            m.invoke(handlerObject, e);
+        } catch (IOException | SerializationException e) {
+            throw e;
+        } catch (Exception e) {
+            /* Propagating all the possible reflection-related exceptions up to
+             * clients seemed undesirable from a usability perspective here, so
+             * we wrap this up in a catch-all exception. */
+            throw new EventException("Error processing event!  "
+                    + StackTraceToString.convert(e));
+        } finally {
+            in.close();
+        }
     }
 
 
