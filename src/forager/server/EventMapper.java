@@ -11,6 +11,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +37,9 @@ public class EventMapper implements MessageListener {
     private EventMap eventMap;
 
     private Map<Class<?>, Method> classToMethod = new HashMap<>();
+
+    private ConcurrentLinkedQueue<GalileoMessage> messageQueue
+        = new ConcurrentLinkedQueue<>();
 
     public EventMapper(Object handlerObject, EventMap eventMap) {
         this.handlerClass = handlerObject.getClass();
@@ -86,26 +93,27 @@ public class EventMapper implements MessageListener {
 
     @Override
     public void onMessage(GalileoMessage message) {
-        ByteArrayInputStream byteIn
-            = new ByteArrayInputStream(message.getPayload());
-        BufferedInputStream buffIn = new BufferedInputStream(byteIn);
-        SerializationInputStream in = new SerializationInputStream(buffIn);
-
-        try {
-            int type = in.readInt();
-            Class<? extends Event> clazz = eventMap.getClass(type);
-            if (clazz == null) {
-                logger.log(Level.WARNING,
-                        "Class mapping for event type {0} not found!", type);
-                in.close();
-                return;
-            }
-            Event e = Serializer.deserializeFromStream(clazz, in);
-            Method m = classToMethod.get(clazz);
-            m.invoke(handlerObject, e);
-            in.close();
-        } catch (Exception e) {
-            logger.log(Level.WARNING, "Error handling incoming message", e);
-        }
+        messageQueue.offer(message);
+//        ByteArrayInputStream byteIn
+//            = new ByteArrayInputStream(message.getPayload());
+//        BufferedInputStream buffIn = new BufferedInputStream(byteIn);
+//        SerializationInputStream in = new SerializationInputStream(buffIn);
+//
+//        try {
+//            int type = in.readInt();
+//            Class<? extends Event> clazz = eventMap.getClass(type);
+//            if (clazz == null) {
+//                logger.log(Level.WARNING,
+//                        "Class mapping for event type {0} not found!", type);
+//                in.close();
+//                return;
+//            }
+//            Event e = Serializer.deserializeFromStream(clazz, in);
+//            Method m = classToMethod.get(clazz);
+//            m.invoke(handlerObject, e);
+//            in.close();
+//        } catch (Exception e) {
+//            logger.log(Level.WARNING, "Error handling incoming message", e);
+//        }
     }
 }
