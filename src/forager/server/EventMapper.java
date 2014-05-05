@@ -57,7 +57,15 @@ public class EventMapper implements MessageListener {
                 if (a.annotationType().equals(EventHandler.class)) {
                     /* This method is an event handler */
                     Class<?>[] params = m.getParameterTypes();
-                    Class<?> eventClass = extractEventClass(params);
+                    Class<?> eventClass;
+                    try {
+                        eventClass = extractEventClass(params);
+                    } catch (EventException e) {
+                        logger.log(Level.WARNING, "Could not determine type of "
+                                + "event handled by method: " + m, e);
+                        break;
+                    }
+
                     logger.log(Level.INFO,
                             "Linking handler method [{0}] to class [{1}]",
                             new Object[] { m.getName(), eventClass.getName() });
