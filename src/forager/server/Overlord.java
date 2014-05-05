@@ -1,26 +1,19 @@
 
 package forager.server;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
-import galileo.event.Event;
 import galileo.event.EventHandler;
-import galileo.event.EventType;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
 import galileo.net.ServerMessageRouter;
-import galileo.serialization.SerializationInputStream;
 
 public class Overlord implements MessageListener {
 
@@ -43,6 +36,10 @@ public class Overlord implements MessageListener {
         messageRouter.addListener(this);
         messageRouter.addListener(eventMapper);
         messageRouter.listen();
+
+        while (true) {
+            eventMapper.processNextEvent();
+        }
     }
 
     @Override

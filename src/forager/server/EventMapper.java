@@ -68,19 +68,29 @@ public class EventMapper implements MessageListener {
         }
     }
 
-    private Class<?> extractEventClass(Class<?>[] parameters) {
+    /**
+     * Determines the class responsible for encapsulating an Event.  This is
+     * achieved by providing a list of parameter types, where the first
+     * parameter will be the the class that represents the event.
+     *
+     * @param parameters A list of method parameters
+     */
+    private Class<?> extractEventClass(Class<?>[] parameters)
+    throws EventException {
         if (parameters.length <= 0) {
-            //TODO throw new exception
+            throw new EventException(
+                    "Event handler method does not have any parameters");
         }
 
         List<Class<?>> interfaces
             = Arrays.asList(parameters[0].getInterfaces());
         if (interfaces.contains(Event.class) == false) {
-            //TODO throw error
+            throw new EventException("EventHandler parameter does not "
+                    + "implement the Event interface");
         }
 
         return parameters[0];
-        //classToMethod.put(parameters[0], m);
+    }
     }
 
 
