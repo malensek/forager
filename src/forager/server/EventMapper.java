@@ -154,27 +154,11 @@ public class EventMapper implements MessageListener {
 
     @Override
     public void onMessage(GalileoMessage message) {
-        messageQueue.offer(message);
-//        ByteArrayInputStream byteIn
-//            = new ByteArrayInputStream(message.getPayload());
-//        BufferedInputStream buffIn = new BufferedInputStream(byteIn);
-//        SerializationInputStream in = new SerializationInputStream(buffIn);
-//
-//        try {
-//            int type = in.readInt();
-//            Class<? extends Event> clazz = eventMap.getClass(type);
-//            if (clazz == null) {
-//                logger.log(Level.WARNING,
-//                        "Class mapping for event type {0} not found!", type);
-//                in.close();
-//                return;
-//            }
-//            Event e = Serializer.deserializeFromStream(clazz, in);
-//            Method m = classToMethod.get(clazz);
-//            m.invoke(handlerObject, e);
-//            in.close();
-//        } catch (Exception e) {
-//            logger.log(Level.WARNING, "Error handling incoming message", e);
-//        }
+        try {
+            messageQueue.put(message);
+        } catch (InterruptedException e) {
+            logger.warning("Interrupted during onMessage delivery");
+            Thread.currentThread().interrupt();
+        }
     }
 }
