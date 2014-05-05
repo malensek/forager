@@ -19,13 +19,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import galileo.event.Event;
+import galileo.event.EventException;
 import galileo.event.EventHandler;
 import galileo.event.EventTypeMap;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
+import galileo.serialization.SerializationException;
 import galileo.serialization.SerializationInputStream;
 import galileo.serialization.Serializer;
+import galileo.util.StackTraceToString;
 
 public class EventMapper implements MessageListener {
 
@@ -38,8 +41,8 @@ public class EventMapper implements MessageListener {
 
     private Map<Class<?>, Method> classToMethod = new HashMap<>();
 
-    private ConcurrentLinkedQueue<GalileoMessage> messageQueue
-        = new ConcurrentLinkedQueue<>();
+    private BlockingQueue<GalileoMessage> messageQueue
+        = new LinkedBlockingQueue<>();
 
     public EventMapper(Object handlerObject, EventMap eventMap) {
         this.handlerClass = handlerObject.getClass();
