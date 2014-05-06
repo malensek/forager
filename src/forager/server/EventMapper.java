@@ -66,6 +66,8 @@ public class EventMapper implements MessageListener {
      * found in the handlerObject.
      */
     public void linkEventHandlers() {
+        classToMethod.clear();
+
         for (Method m : handlerClass.getMethods()) {
             for (Annotation a : m.getAnnotations()) {
                 if (a.annotationType().equals(EventHandler.class)) {
