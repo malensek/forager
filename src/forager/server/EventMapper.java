@@ -27,6 +27,12 @@ import galileo.serialization.SerializationInputStream;
 import galileo.serialization.Serializer;
 import galileo.util.StackTraceToString;
 
+/**
+ * Implements the reactor pattern for processing incoming events
+ * ({@link GalileoMessage} instances).
+ *
+ * @author malensek
+ */
 public class EventMapper implements MessageListener {
 
     private static final Logger logger = Logger.getLogger("galileo");
@@ -41,6 +47,13 @@ public class EventMapper implements MessageListener {
     private BlockingQueue<GalileoMessage> messageQueue
         = new LinkedBlockingQueue<>();
 
+    /**
+     * @param handlerObject an Object instance that contains the implementations
+     * for event handlers, denoted by the {@link EventHandler} annotation.
+     * @param eventMap a EventMap implementation that provides a mapping from
+     * integer identification numbers to specific classes that represent an
+     * event.
+     */
     public EventMapper(Object handlerObject, EventMap eventMap) {
         this.handlerClass = handlerObject.getClass();
         this.handlerObject = handlerObject;
@@ -48,6 +61,10 @@ public class EventMapper implements MessageListener {
         System.out.println(eventMap.getClass(1));
     }
 
+    /**
+     * This method links incoming event types to their relevant event handlers
+     * found in the handlerObject.
+     */
     public void linkEventHandlers() {
         for (Method m : handlerClass.getMethods()) {
             for (Annotation a : m.getAnnotations()) {
