@@ -4,7 +4,6 @@ package forager.events;
 import java.io.IOException;
 
 import galileo.event.Event;
-import galileo.event.EventTypeMap;
 import galileo.serialization.SerializationInputStream;
 import galileo.serialization.SerializationOutputStream;
 
@@ -20,10 +19,6 @@ public class JoinEvent implements Event {
 
     public String getResourceName() {
         return resourceName;
-    }
-
-    public EventTypeMap getTypeMap() {
-        return ForagerEventType.Join;
     }
 
     @Deserialize
