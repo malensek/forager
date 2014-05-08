@@ -1,7 +1,7 @@
 
 package forager.events;
 
-import forager.server.EventMap;
+import galileo.event.EventMap;
 
 public class ForagerEventMap extends EventMap {
 
