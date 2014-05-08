@@ -10,6 +10,7 @@ import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
 import galileo.event.EventHandler;
+import galileo.event.EventReactor;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
@@ -23,22 +24,22 @@ public class Overlord implements MessageListener {
     private ServerMessageRouter messageRouter;
 
     private ForagerEventMap eventMap = new ForagerEventMap();
-    private EventMapper eventMapper = new EventMapper(this, eventMap);
+    private EventReactor eventReactor = new EventReactor(this, eventMap);
 
     public Overlord(int port) {
         this.port = port;
-        eventMapper.linkEventHandlers();
+        eventReactor.linkEventHandlers();
     }
 
     public void start()
     throws IOException, Exception {
         messageRouter = new ServerMessageRouter(this.port);
         messageRouter.addListener(this);
-        messageRouter.addListener(eventMapper);
+        messageRouter.addListener(eventReactor);
         messageRouter.listen();
 
         while (true) {
-            eventMapper.processNextEvent();
+            eventReactor.processNextEvent();
         }
     }
 
