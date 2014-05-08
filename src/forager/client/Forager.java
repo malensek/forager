@@ -3,8 +3,10 @@ package forager.client;
 
 import java.io.IOException;
 
+import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
+import galileo.event.BasicEventWrapper;
 import galileo.event.EventWrapper;
 import galileo.net.ClientMessageRouter;
 import galileo.net.GalileoMessage;
@@ -28,7 +30,8 @@ public class Forager implements MessageListener {
 
         /* Join the network */
         JoinEvent join = new JoinEvent();
-        messageRouter.sendMessage(overlord, EventWrapper.wrap(join));
+        BasicEventWrapper wrap = new BasicEventWrapper(new ForagerEventMap());
+        messageRouter.sendMessage(overlord, wrap.wrap(join));
     }
 
     @Override

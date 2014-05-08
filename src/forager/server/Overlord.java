@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
+import galileo.event.EventContext;
 import galileo.event.EventHandler;
 import galileo.event.EventReactor;
 import galileo.net.GalileoMessage;
@@ -57,8 +58,9 @@ public class Overlord implements MessageListener {
     public void onMessage(GalileoMessage message) { }
 
     @EventHandler
-    public void processJoinEvent(JoinEvent join) {
-        logger.log(Level.INFO, "Received join request: {0}", "xxx");
+    public void processJoinEvent(JoinEvent join, EventContext context) {
+        logger.log(Level.INFO, "Received join request: {0}",
+                context.getSource());
     }
 
     public static void main(String[] args)
