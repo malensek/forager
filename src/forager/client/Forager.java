@@ -7,7 +7,6 @@ import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
 
 import galileo.event.BasicEventWrapper;
-import galileo.event.EventWrapper;
 import galileo.net.ClientMessageRouter;
 import galileo.net.GalileoMessage;
 import galileo.net.MessageListener;
@@ -26,7 +25,6 @@ public class Forager implements MessageListener {
     throws IOException {
         messageRouter = new ClientMessageRouter();
         messageRouter.addListener(this);
-        messageRouter.connectTo(overlord);
 
         /* Join the network */
         JoinEvent join = new JoinEvent();
@@ -41,7 +39,6 @@ public class Forager implements MessageListener {
 
     @Override
     public void onDisconnect(NetworkDestination endpoint) {
-        //TODO: auto reconnect
     }
 
     @Override
