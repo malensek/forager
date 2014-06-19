@@ -34,10 +34,10 @@ public class Overlord implements MessageListener {
 
     public void start()
     throws IOException, Exception {
-        messageRouter = new ServerMessageRouter(this.port);
+        messageRouter = new ServerMessageRouter();
         messageRouter.addListener(this);
         messageRouter.addListener(eventReactor);
-        messageRouter.listen();
+        messageRouter.listen(this.port);
 
         while (true) {
             eventReactor.processNextEvent();
