@@ -29,7 +29,6 @@ public class Overlord implements MessageListener {
 
     public Overlord(int port) {
         this.port = port;
-        eventReactor.linkEventHandlers();
     }
 
     public void start()
