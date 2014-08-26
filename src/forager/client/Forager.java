@@ -1,53 +1,59 @@
 
 package forager.client;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import forager.events.ForagerEventMap;
+import forager.events.Job;
 import forager.events.JoinEvent;
 
-import galileo.event.BasicEventWrapper;
+import galileo.event.EventHandler;
+import galileo.event.EventReactor;
 import galileo.net.ClientMessageRouter;
-import galileo.net.GalileoMessage;
-import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
 
-public class Forager implements MessageListener {
+public class Forager {
 
-    private NetworkDestination overlord;
+    private NetworkDestination server;
     private ClientMessageRouter messageRouter;
 
-    public Forager(NetworkDestination overlord) {
-        this.overlord = overlord;
+    private ForagerEventMap eventMap = new ForagerEventMap();
+    private EventReactor eventReactor = new EventReactor(this, eventMap);
+
+    private ExecutorService threadPool;
+
+    public Forager(NetworkDestination server) {
+        this(server, 4);
+    }
+
+    public Forager(NetworkDestination server, int threads) {
+        this.server = server;
+        this.threadPool = Executors.newFixedThreadPool(threads);
     }
 
     public void start()
-    throws IOException {
+    throws Exception {
         messageRouter = new ClientMessageRouter();
-        messageRouter.addListener(this);
+        messageRouter.addListener(eventReactor);
 
         /* Join the network */
         JoinEvent join = new JoinEvent();
-        BasicEventWrapper wrap = new BasicEventWrapper(new ForagerEventMap());
-        messageRouter.sendMessage(overlord, wrap.wrap(join));
+        messageRouter.sendMessage(server, eventReactor.wrapEvent(join));
+
+        while (true) {
+            eventReactor.processNextEvent();
+        }
     }
 
-    @Override
-    public void onConnect(NetworkDestination endpoint) {
-
-    }
-
-    @Override
-    public void onDisconnect(NetworkDestination endpoint) {
-    }
-
-    @Override
-    public void onMessage(GalileoMessage message) {
-
+    @EventHandler
+    private void startJob(Job job) {
+        System.out.println("Starting job: " + job);
+        //threadPool.submit();
     }
 
     public static void main(String[] args)
-    throws IOException {
+    throws Exception {
         if (args.length < 2) {
             System.out.println("Usage: forager.client.Forager <host> <port>");
             System.exit(1);
