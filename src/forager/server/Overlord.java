@@ -34,7 +34,7 @@ public class Overlord {
 
     private Queue<String> taskList = new LinkedList<>();
 
-    public Overlord(int port) {
+    public Overlord(int port, int startNum) {
         for (int i = 1; i <= 10000; ++i) {
             String cmd = "naader texas2 " + i;
             taskList.add(cmd);
@@ -83,14 +83,15 @@ public class Overlord {
 
     public static void main(String[] args)
     throws Exception {
-        if (args.length < 1) {
+        if (args.length < 2) {
             System.out.println("Usage: forager.server.Overlord <port>");
             System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
+        int startNum = Integer.parseInt(args[1]);
 
-        Overlord overlord = new Overlord(port);
+        Overlord overlord = new Overlord(port, startNum);
         overlord.start();
     }
 }
