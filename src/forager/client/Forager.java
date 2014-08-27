@@ -41,6 +41,10 @@ public class Forager {
         JoinEvent join = new JoinEvent();
         messageRouter.sendMessage(server, eventReactor.wrapEvent(join));
 
+        /* Start the monitor thread */
+        Thread monitor = new Thread(new StatusMonitor(this));
+        monitor.start();
+
         while (true) {
             eventReactor.processNextEvent();
         }
