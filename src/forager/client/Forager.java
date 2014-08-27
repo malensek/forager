@@ -57,9 +57,10 @@ public class Forager {
     }
 
     @EventHandler
-    private void startJob(Job job) {
-        System.out.println("Starting job: " + job);
-        //threadPool.submit();
+    public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
+        System.out.println("Starting job: " + taskSpec);
+        Task task = new Task(taskSpec.command);
+        threadPool.submit(task);
     }
 
     public static void main(String[] args)
