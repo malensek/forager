@@ -8,7 +8,7 @@ import galileo.serialization.SerializationOutputStream;
 
 public class TaskSpec implements Event {
 
-    private String[] command;
+    public String[] command;
 
     public TaskSpec(String[] command) {
         this.command = command;
