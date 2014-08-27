@@ -6,7 +6,8 @@ import galileo.event.EventMap;
 public class ForagerEventMap extends EventMap {
 
     public ForagerEventMap() {
-        addMapping(1, JoinEvent.class);
-        addMapping(2, TaskSpec.class);
+        addMapping(JoinEvent.class);
+        addMapping(TaskRequest.class);
+        addMapping(TaskSpec.class);
     }
 }
