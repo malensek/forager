@@ -46,6 +46,12 @@ public class Forager {
         }
     }
 
+    protected synchronized void submitTaskRequest(int numTasks)
+    throws IOException {
+        TaskRequest tr = new TaskRequest(numTasks);
+        messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
+    }
+
     @EventHandler
     private void startJob(Job job) {
         System.out.println("Starting job: " + job);
