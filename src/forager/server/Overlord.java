@@ -2,12 +2,17 @@
 package forager.server;
 
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
+import forager.events.TaskRequest;
+import forager.events.TaskSpec;
 
 import galileo.event.EventContext;
 import galileo.event.EventHandler;
@@ -27,7 +32,13 @@ public class Overlord {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
+    private Queue<String> taskList = new LinkedList<>();
+
     public Overlord(int port) {
+        for (int i = 1; i <= 10000; ++i) {
+            String cmd = "naader texas2 " + i;
+            taskList.add(cmd);
+        }
         this.port = port;
     }
 
