@@ -24,6 +24,7 @@ public class Forager {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
+    private int maxTasks = 0;
     private int activeTasks = 0;
     private int pendingRequests = 0;
     protected ExecutorService threadPool;
@@ -34,6 +35,7 @@ public class Forager {
 
     public Forager(NetworkDestination server, int threads) {
         this.server = server;
+        this.maxTasks = threads;
         this.threadPool = Executors.newFixedThreadPool(threads);
     }
 
@@ -75,6 +77,10 @@ public class Forager {
         return pendingRequests;
     }
 
+    public int getMaxTasks() {
+        return maxTasks;
+    }
+
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
         System.out.println("Starting job: " + taskSpec);
@@ -86,7 +92,7 @@ public class Forager {
 
     public static void main(String[] args)
     throws Exception {
-        if (args.length < 2) {
+        if (args.length < 3) {
             System.out.println("Usage: forager.client.Forager <host> <port>");
             System.exit(1);
         }
@@ -95,7 +101,9 @@ public class Forager {
         int port = Integer.parseInt(args[1]);
         NetworkDestination overlord = new NetworkDestination(host, port);
 
-        Forager forager = new Forager(overlord);
+        int threads = Integer.parseInt(args[2]);
+
+        Forager forager = new Forager(overlord, threads);
         forager.start();
     }
 }

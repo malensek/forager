@@ -12,6 +12,7 @@ public class StatusMonitor implements Runnable {
 
     public StatusMonitor(Forager forager) {
         this.forager = forager;
+        this.maxActive = forager.getMaxTasks();
     }
 
     public void run() {
