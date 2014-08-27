@@ -1,13 +1,16 @@
 
 package forager.client;
 
-import java.util.concurrent.ExecutorService;
+import java.io.IOException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import forager.events.ForagerEventMap;
-import forager.events.Job;
 import forager.events.JoinEvent;
+import forager.events.TaskRequest;
+import forager.events.TaskSpec;
 
+import galileo.event.EventContext;
 import galileo.event.EventHandler;
 import galileo.event.EventReactor;
 import galileo.net.ClientMessageRouter;
@@ -21,7 +24,7 @@ public class Forager {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
-    private ExecutorService threadPool;
+    protected ThreadPoolExecutor threadPool;
 
     public Forager(NetworkDestination server) {
         this(server, 4);
@@ -29,7 +32,8 @@ public class Forager {
 
     public Forager(NetworkDestination server, int threads) {
         this.server = server;
-        this.threadPool = Executors.newFixedThreadPool(threads);
+        this.threadPool
+            = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
     }
 
     public void start()
