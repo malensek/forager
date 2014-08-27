@@ -78,7 +78,7 @@ public class Forager {
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
         System.out.println("Starting job: " + taskSpec);
-        Task task = new Task(taskSpec.command);
+        Task task = new Task(taskSpec.command, this);
         pendingRequests--;
         activeTasks++;
         threadPool.submit(task);

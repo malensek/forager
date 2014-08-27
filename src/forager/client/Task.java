@@ -5,9 +5,11 @@ import java.lang.ProcessBuilder.Redirect;
 public class Task implements Runnable {
 
     private String[] command;
+    private Forager forager;
 
-    public Task(String[] command) {
+    public Task(String[] command, Forager forager) {
         this.command = command;
+        this.forager = forager;
     }
 
     public void run() {
@@ -19,6 +21,7 @@ public class Task implements Runnable {
 
             Process p = pb.start();
             p.waitFor();
+            forager.finalizeTask();
         } catch (Exception e) {
             e.printStackTrace();
         }
