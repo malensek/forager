@@ -70,6 +70,8 @@ public class Overlord {
             System.exit(0);
         }
 
+        System.out.println(taskList.size() + " tasks remaining.");
+
         for (int i = 0; i < request.numTasks; ++i) {
             String taskString = taskList.remove();
             TaskSpec spec = new TaskSpec(taskString.split("\\s+"));
