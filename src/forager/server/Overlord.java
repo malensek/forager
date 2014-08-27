@@ -17,7 +17,7 @@ import galileo.net.MessageListener;
 import galileo.net.NetworkDestination;
 import galileo.net.ServerMessageRouter;
 
-public class Overlord implements MessageListener {
+public class Overlord {
 
     private static final Logger logger = Logger.getLogger("forager");
 
@@ -34,7 +34,6 @@ public class Overlord implements MessageListener {
     public void start()
     throws IOException, Exception {
         messageRouter = new ServerMessageRouter();
-        messageRouter.addListener(this);
         messageRouter.addListener(eventReactor);
         messageRouter.listen(this.port);
 
@@ -43,23 +42,32 @@ public class Overlord implements MessageListener {
         }
     }
 
-    @Override
-    public void onConnect(NetworkDestination endpoint) {
-
-    }
-
-    @Override
-    public void onDisconnect(NetworkDestination endpoint) {
-
-    }
-
-    @Override
-    public void onMessage(GalileoMessage message) { }
-
     @EventHandler
     public void processJoinEvent(JoinEvent join, EventContext context) {
         logger.log(Level.INFO, "Received join request: {0}",
                 context.getSource());
+    }
+
+    @EventHandler
+    public void processTaskRequest(TaskRequest request, EventContext context) {
+
+        System.out.println(request.numTasks + " tasks requested by "
+                + context.getSource());
+
+        if (taskList.size() == 0) {
+            System.out.println("All tasks are complete!");
+            System.exit(0);
+        }
+
+        for (int i = 0; i < request.numTasks; ++i) {
+            String taskString = taskList.remove();
+            TaskSpec spec = new TaskSpec(taskString.split("\\s+"));
+            try {
+                context.sendReply(spec);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void main(String[] args)
