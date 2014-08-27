@@ -25,6 +25,7 @@ public class Forager {
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
     private int activeTasks = 0;
+    private int pendingRequests = 0;
     protected ExecutorService threadPool;
 
     public Forager(NetworkDestination server) {
@@ -57,6 +58,7 @@ public class Forager {
     protected synchronized void submitTaskRequest(int numTasks)
     throws IOException {
         TaskRequest tr = new TaskRequest(numTasks);
+        pendingRequests += numTasks;
         messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
     }
 
@@ -65,14 +67,19 @@ public class Forager {
         activeTasks--;
     }
 
-    protected synchronized int getActiveCount() {
+    protected synchronized int getNumActive() {
         return activeTasks;
+    }
+
+    protected synchronized int getNumPending() {
+        return pendingRequests;
     }
 
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
         System.out.println("Starting job: " + taskSpec);
         Task task = new Task(taskSpec.command);
+        pendingRequests--;
         activeTasks++;
         threadPool.submit(task);
     }
