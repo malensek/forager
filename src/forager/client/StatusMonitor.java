@@ -18,7 +18,7 @@ public class StatusMonitor implements Runnable {
         online = true;
 
         while (online) {
-            int active = forager.threadPool.getActiveCount();
+            int active = forager.getActiveCount();
             if (active < maxActive) {
                 int numTasks = maxActive - active;
                 try {
