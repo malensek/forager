@@ -2,8 +2,8 @@
 package forager.client;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import forager.events.ForagerEventMap;
 import forager.events.JoinEvent;
@@ -24,7 +24,8 @@ public class Forager {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
-    protected ThreadPoolExecutor threadPool;
+    private int activeTasks = 0;
+    protected ExecutorService threadPool;
 
     public Forager(NetworkDestination server) {
         this(server, 4);
@@ -32,8 +33,7 @@ public class Forager {
 
     public Forager(NetworkDestination server, int threads) {
         this.server = server;
-        this.threadPool
-            = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
+        this.threadPool = Executors.newFixedThreadPool(threads);
     }
 
     public void start()
@@ -60,10 +60,20 @@ public class Forager {
         messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
     }
 
+    protected synchronized void finalizeTask() {
+        System.out.println("Received task completion notification");
+        activeTasks--;
+    }
+
+    protected synchronized int getActiveCount() {
+        return activeTasks;
+    }
+
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
         System.out.println("Starting job: " + taskSpec);
         Task task = new Task(taskSpec.command);
+        activeTasks++;
         threadPool.submit(task);
     }
 
