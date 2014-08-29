@@ -81,9 +81,6 @@ public class Overlord {
                 e.printStackTrace();
             }
         }
-        try {
-        Thread.sleep(2500);
-        } catch (Exception e) { }
     }
 
     public static void main(String[] args)
