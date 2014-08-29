@@ -59,10 +59,6 @@ public class Overlord {
     private Queue<String> taskList = new LinkedList<>();
 
     public Overlord(int port, int startNum) {
-        for (int i = startNum; i <= 10000; ++i) {
-            String cmd = "naader texas2 " + i;
-            taskList.add(cmd);
-        }
         this.port = port;
     }
 
