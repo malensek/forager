@@ -26,9 +26,7 @@ software, even if advised of the possibility of such damage.
 package forager.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,9 +39,6 @@ import forager.events.TaskSpec;
 import galileo.event.EventContext;
 import galileo.event.EventHandler;
 import galileo.event.EventReactor;
-import galileo.net.GalileoMessage;
-import galileo.net.MessageListener;
-import galileo.net.NetworkDestination;
 import galileo.net.ServerMessageRouter;
 
 public class Overlord {
@@ -58,7 +53,7 @@ public class Overlord {
 
     private Queue<String> taskList = new LinkedList<>();
 
-    public Overlord(int port, int startNum) {
+    public Overlord(int port) {
         this.port = port;
     }
 
@@ -105,15 +100,14 @@ public class Overlord {
 
     public static void main(String[] args)
     throws Exception {
-        if (args.length < 2) {
+        if (args.length < 1) {
             System.out.println("Usage: forager.server.Overlord <port>");
             System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
-        int startNum = Integer.parseInt(args[1]);
 
-        Overlord overlord = new Overlord(port, startNum);
+        Overlord overlord = new Overlord(port);
         overlord.start();
     }
 }
