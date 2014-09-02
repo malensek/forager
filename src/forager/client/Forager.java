@@ -30,6 +30,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import forager.events.ForagerEventMap;
+import forager.events.TaskCompletion;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
@@ -83,9 +84,12 @@ public class Forager {
         messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
     }
 
-    protected synchronized void finalizeTask() {
-        System.out.println("Received task completion notification");
+    protected synchronized void finalizeTask(TaskSpec task)
+    throws IOException {
+        System.out.println("Received task completion notification: " + task);
         activeTasks--;
+        TaskCompletion completion = new TaskCompletion(task.taskId);
+        messageRouter.sendMessage(server, eventReactor.wrapEvent(completion));
     }
 
     protected synchronized int getNumActive() {
