@@ -2,7 +2,7 @@
 
 <project name="forager" basedir="." default="jar">
     <!-- Build properties -->
-    <property name="project.version" value="0.1"/>
+    <property name="project.version" value="1.0"/>
     <property name="project.url" value="http://galileo.cs.colostate.edu"/>
     <tstamp>
         <format property="build.date" pattern="MM-dd-yyyy"/>
@@ -15,7 +15,7 @@
     <property name="docs" value="docs/api"/>
     <property name="depcache" value="depcache"/>
     <property name="jar.name"
-            value="${lib}/${ant.project.name}-${project.version}.jar"/>
+            value="${ant.project.name}-${project.version}.jar"/>
     <property file="build.properties"/>
 
     <path id="classpath">
@@ -59,8 +59,10 @@
             <classpath refid="classpath"/>
         </manifestclasspath>
 
-        <jar basedir="${build}" jarfile="${jar.name}">
-            <zipgroupfileset dir="${lib}" includes="*.jar"/>
+        <jar basedir="${build}" destfile="${jar.name}">
+            <zipgroupfileset dir="${lib}"
+                    includes="*.jar" excludes="${jar.name}"/>
+
             <manifest>
                 <attribute name="Built-By"
                         value="${user.name}"/>
