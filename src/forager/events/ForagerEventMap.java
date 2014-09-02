@@ -32,5 +32,6 @@ public class ForagerEventMap extends EventMap {
     public ForagerEventMap() {
         addMapping(TaskRequest.class);
         addMapping(TaskSpec.class);
+        addMapping(TaskCompletion.class);
     }
 }
