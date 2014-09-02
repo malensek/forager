@@ -2,26 +2,28 @@ package forager.client;
 
 import java.lang.ProcessBuilder.Redirect;
 
-public class Task implements Runnable {
+import forager.events.TaskSpec;
 
-    private String[] command;
+public class TaskThread implements Runnable {
+
+    private TaskSpec task;
     private Forager forager;
 
-    public Task(String[] command, Forager forager) {
-        this.command = command;
+    public TaskThread(TaskSpec task, Forager forager) {
+        this.task = task;
         this.forager = forager;
     }
 
     public void run() {
         try {
-            ProcessBuilder pb = new ProcessBuilder(command);
+            ProcessBuilder pb = new ProcessBuilder(task.command);
 
             pb.redirectOutput(Redirect.INHERIT);
             pb.redirectError(Redirect.INHERIT);
 
             Process p = pb.start();
             p.waitFor();
-            forager.finalizeTask();
+            forager.finalizeTask(task);
         } catch (Exception e) {
             e.printStackTrace();
         }
