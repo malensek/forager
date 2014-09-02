@@ -35,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
+import forager.events.TaskCompletion;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
@@ -53,6 +54,7 @@ public class Overlord {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
+    private long taskCounter = 0;
     private Queue<String> taskList = new LinkedList<>();
 
     public Overlord(int port) {
@@ -96,13 +98,23 @@ public class Overlord {
 
         for (int i = 0; i < request.numTasks; ++i) {
             String taskString = taskList.remove();
-            TaskSpec spec = new TaskSpec(taskString.split("\\s+"));
+            TaskSpec spec = new TaskSpec(
+                    taskCounter++, taskString.split("\\s+"));
             try {
                 context.sendReply(spec);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    @EventHandler
+    public void processCompletedTask(
+            TaskCompletion completedTask, EventContext context) {
+
+        logger.log(Level.INFO, "Task {0} completed by {1}",
+                new Object[] { completedTask.taskId, context.getSource() });
+
     }
 
     public static void main(String[] args)
