@@ -75,6 +75,7 @@ public class Overlord {
 
         if (taskList.size() == 0) {
             System.out.println("All tasks are complete!");
+            System.out.println("Shutting down.");
             System.exit(0);
         }
 
