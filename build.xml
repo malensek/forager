@@ -19,7 +19,7 @@
     <property file="build.properties"/>
 
     <path id="classpath">
-        <fileset dir="." includes="lib/*.jar"/>
+        <fileset dir="." includes="${lib}/*.jar"/>
     </path>
 
     <target name="compile" description="Compile source files">
@@ -60,6 +60,7 @@
         </manifestclasspath>
 
         <jar basedir="${build}" jarfile="${jar.name}">
+            <zipgroupfileset dir="${lib}" includes="*.jar"/>
             <manifest>
                 <attribute name="Built-By"
                         value="${user.name}"/>
@@ -70,6 +71,7 @@
                 <attribute name="Specification-URL"
                         value="${project.url}"/>
                 <attribute name="Class-Path" value="${jar.classpath}"/>
+                <attribute name="Main-Class" value="forager.ui.Launcher"/>
             </manifest>
         </jar>
     </target>
