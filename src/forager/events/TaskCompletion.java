@@ -8,22 +8,22 @@ import java.io.IOException;
 
 public class TaskCompletion implements Event {
 
-    public long taskId;
+    public int taskId;
 
-    public TaskCompletion(long taskId) {
+    public TaskCompletion(int taskId) {
         this.taskId = taskId;
     }
 
     @Deserialize
     public TaskCompletion(SerializationInputStream in)
     throws IOException {
-        taskId = in.readLong();
+        taskId = in.readInt();
     }
 
     @Override
     public void serialize(SerializationOutputStream out)
     throws IOException {
-        out.writeLong(taskId);
+        out.writeInt(taskId);
     }
 
 }

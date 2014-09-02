@@ -54,7 +54,7 @@ public class Overlord {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
-    private long taskCounter = 0;
+    private int taskCounter = 0;
     private Queue<String> taskList = new LinkedList<>();
 
     public Overlord(int port) {

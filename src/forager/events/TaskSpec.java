@@ -8,10 +8,10 @@ import galileo.serialization.SerializationOutputStream;
 
 public class TaskSpec implements Event {
 
-    public long taskId;
+    public int taskId;
     public String[] command;
 
-    public TaskSpec(long taskId, String[] command) {
+    public TaskSpec(int taskId, String[] command) {
         this.taskId = taskId;
         this.command = command;
     }
@@ -27,7 +27,7 @@ public class TaskSpec implements Event {
     @Deserialize
     public TaskSpec(SerializationInputStream in)
     throws IOException {
-        taskId = in.readLong();
+        taskId = in.readInt();
         int numArgs = in.readInt();
         command = new String[numArgs];
         for (int i = 0; i < numArgs; ++i) {
@@ -38,7 +38,7 @@ public class TaskSpec implements Event {
     @Override
     public void serialize(SerializationOutputStream out)
     throws IOException {
-        out.writeLong(taskId);
+        out.writeInt(taskId);
         out.writeInt(command.length);
         for (String s : command) {
             out.writeString(s);
