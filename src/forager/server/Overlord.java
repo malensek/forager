@@ -25,6 +25,9 @@ software, even if advised of the possibility of such damage.
 
 package forager.server;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -67,6 +70,16 @@ public class Overlord {
         }
     }
 
+    public void addTaskFile(String file)
+    throws FileNotFoundException, IOException {
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String line;
+        while ((line = br.readLine()) != null) {
+            taskList.add(line);
+        }
+        br.close();
+    }
+
     @EventHandler
     public void processTaskRequest(TaskRequest request, EventContext context) {
 
@@ -94,14 +107,16 @@ public class Overlord {
 
     public static void main(String[] args)
     throws Exception {
-        if (args.length < 1) {
-            System.out.println("Usage: forager.server.Overlord <port>");
+        if (args.length < 2) {
+            System.out.println("Usage: forager.server.Overlord <port> <file>");
             System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
+        String tasks = args[1];
 
         Overlord overlord = new Overlord(port);
+        overlord.addTaskFile(tasks);
         overlord.start();
     }
 }
