@@ -106,11 +106,11 @@ public class Forager {
 
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
-        System.out.println("Starting job: " + taskSpec);
-        Task task = new Task(taskSpec.command, this);
+        System.out.println("Starting task: " + taskSpec);
+        TaskThread thread = new TaskThread(taskSpec, this);
         pendingRequests--;
         activeTasks++;
-        threadPool.submit(task);
+        threadPool.submit(thread);
     }
 
     public static void main(String[] args)
