@@ -30,7 +30,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import forager.events.ForagerEventMap;
-import forager.events.JoinEvent;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
@@ -67,10 +66,6 @@ public class Forager {
     throws Exception {
         messageRouter = new ClientMessageRouter();
         messageRouter.addListener(eventReactor);
-
-        /* Join the network */
-        JoinEvent join = new JoinEvent();
-        messageRouter.sendMessage(server, eventReactor.wrapEvent(join));
 
         /* Start the monitor thread */
         Thread monitor = new Thread(new StatusMonitor(this));
