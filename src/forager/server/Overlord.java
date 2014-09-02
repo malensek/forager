@@ -70,15 +70,15 @@ public class Overlord {
     @EventHandler
     public void processTaskRequest(TaskRequest request, EventContext context) {
 
-        System.out.println(request.numTasks + " tasks requested by "
-                + context.getSource());
+        logger.log(Level.INFO, "{0} tasks requested by {1}",
+                new Object[] { request.numTasks, context.getSource() });
 
         if (taskList.size() == 0) {
             System.out.println("All tasks are complete!");
             System.exit(0);
         }
 
-        System.out.println(taskList.size() + " tasks remaining.");
+        logger.log(Level.INFO, "{0} tasks remaining.", taskList.size());
 
         for (int i = 0; i < request.numTasks; ++i) {
             String taskString = taskList.remove();
