@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
-import forager.events.JoinEvent;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
@@ -66,12 +65,6 @@ public class Overlord {
         while (true) {
             eventReactor.processNextEvent();
         }
-    }
-
-    @EventHandler
-    public void processJoinEvent(JoinEvent join, EventContext context) {
-        logger.log(Level.INFO, "Received join request: {0}",
-                context.getSource());
     }
 
     @EventHandler
