@@ -35,6 +35,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
+import forager.events.ImportRequest;
+import forager.events.ImportResponse;
 import forager.events.TaskCompletion;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
@@ -123,6 +125,20 @@ public class Overlord {
         logger.log(Level.INFO, "Task {0} completed by {1}",
                 new Object[] { completedTask.taskId, context.getSource() });
 
+    }
+
+    @EventHandler
+    public void processImportRequest(
+            ImportRequest request, EventContext context) {
+
+        logger.log(Level.INFO, "Importing {0} tasks submitted by {1}",
+                new Object[] { request.tasks.size(), context.getSource() });
+        taskList.addAll(request.tasks);
+        try {
+            context.sendReply(new ImportResponse(true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args)
