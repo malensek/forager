@@ -97,6 +97,11 @@ public class Overlord {
             System.exit(0);
         }
 
+        /* Don't allow clients to request more tasks than we actually have */
+        if (request.numTasks > taskList.size()) {
+            request.numTasks = taskList.size();
+        }
+
         logger.log(Level.INFO, "{0} tasks remaining.", taskList.size());
 
         for (int i = 0; i < request.numTasks; ++i) {
