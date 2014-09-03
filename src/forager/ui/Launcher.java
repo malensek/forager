@@ -28,4 +28,14 @@ public class Launcher {
         HelpFormatter formatter = new HelpFormatter();
         formatter.printHelp("ant", options);
     }
+    private static int getPort(CommandLine cl) {
+        int port;
+        if (cl.hasOption("port")) {
+            port = Integer.parseInt(cl.getOptionValue("port"));
+        } else {
+            port = DEFAULT_PORT;
+        }
+
+        return port;
+    }
 }
