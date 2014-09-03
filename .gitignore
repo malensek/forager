@@ -12,4 +12,5 @@ build.properties
 .DS_Store
 
 # Binaries
-lib/forager-*.jar
+forager-*.jar
+bin/forager
