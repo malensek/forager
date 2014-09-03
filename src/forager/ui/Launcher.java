@@ -5,6 +5,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.UnrecognizedOptionException;
 
 import forager.client.Forager;
 import forager.server.Overlord;
@@ -27,7 +28,13 @@ public class Launcher {
         options.addOption("t", "threads", true,
                 "Maximum number of threads to use (client only)");
 
-        CommandLine cl = parser.parse(options, args);
+        CommandLine cl = null;
+        try {
+            cl = parser.parse(options, args);
+        } catch (UnrecognizedOptionException e) {
+            printUsage();
+        }
+
         if (cl.hasOption("server")) {
             Overlord server = new Overlord(getPort(cl));
             server.start();
@@ -37,7 +44,6 @@ public class Launcher {
             String[] clientArgs = cl.getArgs();
             if (args.length < 1) {
                 printUsage();
-                System.exit(1);
             }
             NetworkDestination server = new NetworkDestination(
                     clientArgs[0], getPort(cl));
@@ -68,6 +74,13 @@ public class Launcher {
     }
 
     private static void printUsage() {
+        printUsage(true);
+    }
+
+    private static void printUsage(boolean exit) {
         //TODO
+        if (exit) {
+            System.exit(1);
+        }
     }
 }
