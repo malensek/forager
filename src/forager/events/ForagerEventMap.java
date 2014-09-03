@@ -33,5 +33,8 @@ public class ForagerEventMap extends EventMap {
         addMapping(TaskRequest.class);
         addMapping(TaskSpec.class);
         addMapping(TaskCompletion.class);
+
+        addMapping(ImportRequest.class);
+        addMapping(ImportResponse.class);
     }
 }
