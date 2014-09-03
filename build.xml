@@ -10,6 +10,7 @@
 
     <!-- Directories -->
     <property name="src" value="src"/>
+    <property name="bin" value="bin"/>
     <property name="build" value="classes"/>
     <property name="lib" value="lib"/>
     <property name="docs" value="docs/api"/>
@@ -64,18 +65,20 @@
                     includes="*.jar" excludes="${jar.name}"/>
 
             <manifest>
-                <attribute name="Built-By"
-                        value="${user.name}"/>
-                <attribute name="Specification-Title"
-                        value="${ant.project.name}"/>
-                <attribute name="Specification-Version"
-                        value="${project.version}"/>
-                <attribute name="Specification-URL"
-                        value="${project.url}"/>
+                <attribute name="Built-By" value="${user.name}"/>
+                <attribute name="Specification-Title" value="${ant.project.name}"/>
+                <attribute name="Specification-Version" value="${project.version}"/>
+                <attribute name="Specification-URL" value="${project.url}"/>
                 <attribute name="Class-Path" value="${jar.classpath}"/>
                 <attribute name="Main-Class" value="forager.ui.Launcher"/>
             </manifest>
         </jar>
+
+        <concat destfile="${bin}/${ant.project.name}" binary="yes">
+            <fileset file="etc/bootstrap.sh"/>
+            <fileset file="${jar.name}"/>
+        </concat>
+        <chmod file="${bin}/${ant.project.name}" perm="+x"/>
     </target>
 
     <target name="javadoc" description="Generates javadoc">
@@ -106,6 +109,7 @@
     <!-- cleans up everything from the releaseclean task, plus additional files
       that should not be cleaned up for a release -->
     <target name="clean" depends="releaseclean">
+        <delete dir="${bin}"/>
         <delete dir="${docs}"/>
         <delete file="${jar.name}"/>
     </target>
