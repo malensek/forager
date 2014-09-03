@@ -46,8 +46,6 @@ import galileo.net.ServerMessageRouter;
 
 public class Overlord {
 
-    public static final int DEFAULT_PORT = 53380;
-
     private static final Logger logger = Logger.getLogger("forager");
 
     private int port;
@@ -58,10 +56,6 @@ public class Overlord {
 
     private int taskCounter = 0;
     private Queue<String> taskList = new LinkedList<>();
-
-    public Overlord() {
-        this.port = DEFAULT_PORT;
-    }
 
     public Overlord(int port) {
         this.port = port;
