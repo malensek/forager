@@ -90,6 +90,7 @@ public class Forager {
         activeTasks--;
         TaskCompletion completion = new TaskCompletion(task.taskId);
         messageRouter.sendMessage(server, eventReactor.wrapEvent(completion));
+        //TODO: we should wake up the scheduler thread here
     }
 
     protected synchronized int getNumActive() {
