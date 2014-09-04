@@ -29,7 +29,9 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,8 +58,9 @@ public class Overlord {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
-    private int taskCounter = 0;
-    private Queue<String> taskList = new LinkedList<>();
+    private long taskSerial = 0;
+    private long taskPointer = 0;
+    private Map<Long, TaskSpec> tasks = new HashMap<>();
 
     public Overlord(int port) {
         this.port = port;
@@ -74,17 +77,34 @@ public class Overlord {
         }
     }
 
-    public void addTaskFile(String file)
-    throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
-        int added = 0;
-        String line;
-        while ((line = br.readLine()) != null) {
-            taskList.add(line);
-            added++;
+    private void addTask(String command) {
+        TaskSpec task = new TaskSpec(taskSerial++, command);
+        tasks.put(task.taskId, task);
+    }
+
+    private TaskSpec getNextTask() {
+        if (tasks.size() == 0) {
+            /* We have no tasks to assign.  Return an 'idle' task */
+            return new TaskSpec(-1, "");
         }
-        br.close();
-        logger.log(Level.INFO, "Added {0} tasks.", added);
+
+        TaskSpec task = tasks.get(taskPointer);
+        if (task != null) {
+            taskPointer++;
+            return task;
+        } else {
+            /* Current pointer didn't have an assignable task for us. We need to
+             * find the next assignable task by iterating through the map. */
+            for (TaskSpec taskSpec : tasks.values()) {
+                if (taskSpec.isAssigned() == false) {
+                    taskPointer = taskSpec.taskId + 1;
+                    return taskSpec;
+                }
+            }
+            /* No unassigned tasks were found */
+            //TODO check assignment times and re-assign. for now, schedule idle.
+            return new TaskSpec(-1, "");
+        }
     }
 
 //    public void addTaskFile(String file)
@@ -106,30 +126,17 @@ public class Overlord {
         logger.log(Level.INFO, "{0} tasks requested by {1}",
                 new Object[] { request.numTasks, context.getSource() });
 
-        if (taskList.size() == 0) {
-            System.out.println("All tasks are complete!");
-            System.out.println("Shutting down.");
-            System.exit(0);
-        }
-
-        /* Don't allow clients to request more tasks than we actually have */
-        if (request.numTasks > taskList.size()) {
-            request.numTasks = taskList.size();
-        }
-
-
         for (int i = 0; i < request.numTasks; ++i) {
-            String taskString = taskList.remove();
-            TaskSpec spec = new TaskSpec(
-                    taskCounter++, taskString.split("\\s+"));
+            TaskSpec task = getNextTask();
+            task.addAssignment(context.getSource());
+
             try {
-                context.sendReply(spec);
+                context.sendReply(task);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.WARNING, "Error assigning task.", e);
+                task.removeAssignment(context.getSource());
             }
         }
-
-        logger.log(Level.INFO, "{0} tasks remaining.", taskList.size());
     }
 
     @EventHandler
@@ -147,7 +154,11 @@ public class Overlord {
 
         logger.log(Level.INFO, "Importing {0} tasks submitted by {1}",
                 new Object[] { request.tasks.size(), context.getSource() });
-        taskList.addAll(request.tasks);
+
+        for (String command : request.tasks) {
+            addTask(command);
+        }
+
         try {
             context.sendReply(new ImportResponse(true));
         } catch (IOException e) {
