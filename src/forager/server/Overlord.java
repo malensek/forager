@@ -141,19 +141,4 @@ public class Overlord {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args)
-    throws Exception {
-        if (args.length < 2) {
-            System.out.println("Usage: forager.server.Overlord <port> <file>");
-            System.exit(1);
-        }
-
-        int port = Integer.parseInt(args[0]);
-        String tasks = args[1];
-
-        Overlord overlord = new Overlord(port);
-        overlord.addTaskFile(tasks);
-        overlord.start();
-    }
 }
