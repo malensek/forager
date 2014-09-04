@@ -16,7 +16,8 @@ public class TaskThread implements Runnable {
 
     public void run() {
         try {
-            ProcessBuilder pb = new ProcessBuilder(task.command);
+            String[] command = task.command.split("\\s+");
+            ProcessBuilder pb = new ProcessBuilder(command);
 
             pb.redirectOutput(Redirect.INHERIT);
             pb.redirectError(Redirect.INHERIT);
