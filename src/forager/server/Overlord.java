@@ -104,7 +104,6 @@ public class Overlord {
             request.numTasks = taskList.size();
         }
 
-        logger.log(Level.INFO, "{0} tasks remaining.", taskList.size());
 
         for (int i = 0; i < request.numTasks; ++i) {
             String taskString = taskList.remove();
@@ -116,6 +115,8 @@ public class Overlord {
                 e.printStackTrace();
             }
         }
+
+        logger.log(Level.INFO, "{0} tasks remaining.", taskList.size());
     }
 
     @EventHandler
