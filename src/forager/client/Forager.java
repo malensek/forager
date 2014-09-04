@@ -28,6 +28,8 @@ package forager.client;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import forager.events.ForagerEventMap;
 import forager.events.TaskCompletion;
@@ -41,6 +43,8 @@ import galileo.net.ClientMessageRouter;
 import galileo.net.NetworkDestination;
 
 public class Forager {
+
+    private static final Logger logger = Logger.getLogger("forager");
 
     private NetworkDestination server;
     private ClientMessageRouter messageRouter;
@@ -111,10 +115,16 @@ public class Forager {
 
     @EventHandler
     public void processTaskSpec(TaskSpec taskSpec, EventContext context) {
-        System.out.println("Starting task: " + taskSpec);
-        TaskThread thread = new TaskThread(taskSpec, this);
         pendingRequests--;
+
+        if (taskSpec.taskId == -1) {
+            logger.log(Level.INFO, "Received idle task");
+            return;
+        }
+
+        logger.log(Level.INFO, "Starting task: {0}", taskSpec);
         activeTasks++;
+        TaskThread thread = new TaskThread(taskSpec, this);
         threadPool.submit(thread);
     }
 
