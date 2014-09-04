@@ -87,6 +87,19 @@ public class Overlord {
         logger.log(Level.INFO, "Added {0} tasks.", added);
     }
 
+//    public void addTaskFile(String file)
+//    throws FileNotFoundException, IOException {
+//        BufferedReader br = new BufferedReader(new FileReader(file));
+//        int added = 0;
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            taskList.add(line);
+//            added++;
+//        }
+//        br.close();
+//        logger.log(Level.INFO, "Added {0} tasks.", added);
+//    }
+
     @EventHandler
     public void processTaskRequest(TaskRequest request, EventContext context) {
 
