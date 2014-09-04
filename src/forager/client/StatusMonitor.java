@@ -1,8 +1,11 @@
 package forager.client;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class StatusMonitor implements Runnable {
+
+    private static final Logger logger = Logger.getLogger("forager");
 
     int maxActive = 4;
 
@@ -30,8 +33,10 @@ public class StatusMonitor implements Runnable {
                 }
             }
             try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) { }
+                Thread.sleep(30000);
+            } catch (InterruptedException e) {
+                logger.fine("Waking up StatusMonitor thread");
+            }
         }
     }
 }
