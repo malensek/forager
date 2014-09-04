@@ -23,7 +23,8 @@ public class TaskThread implements Runnable {
             pb.redirectError(Redirect.INHERIT);
 
             Process p = pb.start();
-            p.waitFor();
+            int i = p.waitFor();
+
             forager.finalizeTask(task);
         } catch (Exception e) {
             e.printStackTrace();
