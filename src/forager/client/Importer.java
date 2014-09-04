@@ -32,10 +32,8 @@ public class Importer {
     throws Exception {
         ClientMessageRouter messageRouter = new ClientMessageRouter();
         messageRouter.addListener(eventReactor);
-        BasicEventWrapper wrapper
-            = new BasicEventWrapper(new ForagerEventMap());
-        GalileoMessage message = wrapper.wrap(new ImportRequest(tasks));
-        messageRouter.sendMessage(server, message);
+        ImportRequest request = new ImportRequest(tasks);
+        messageRouter.sendMessage(server, eventReactor.wrapEvent(request));
         eventReactor.processNextEvent();
         messageRouter.shutdown();
     }
