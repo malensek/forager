@@ -12,8 +12,27 @@ public class TaskSpec implements Event {
     public String[] command;
 
     public TaskSpec(int taskId, String[] command) {
+    private List<NetworkDestination> assignments = new ArrayList<>();
         this.taskId = taskId;
         this.command = command;
+    }
+
+    public void addAssignment(NetworkDestination host) {
+        assignments.add(host);
+    }
+
+    public void removeAssignment(NetworkDestination host) {
+        assignments.remove(host);
+    }
+
+    /**
+     * Determine whether the Task associated with this TaskSpec has been
+     * assigned to any resources yet.
+     *
+     * @return true if the Task has been assigned, false otherwise.
+     */
+    public boolean isAssigned() {
+        return assignments.isEmpty() == false;
     }
 
     public String toString() {
