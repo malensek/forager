@@ -48,6 +48,9 @@ public class Forager {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
+    private StatusMonitor monitor;
+    private Thread monitorThread;
+
     private int maxTasks = 0;
     private int activeTasks = 0;
     private int pendingRequests = 0;
@@ -69,8 +72,9 @@ public class Forager {
         messageRouter.addListener(eventReactor);
 
         /* Start the monitor thread */
-        Thread monitor = new Thread(new StatusMonitor(this));
-        monitor.start();
+        monitor = new StatusMonitor(this);
+        monitorThread = new Thread(monitor);
+        monitorThread.start();
 
         while (true) {
             eventReactor.processNextEvent();
@@ -90,7 +94,7 @@ public class Forager {
         activeTasks--;
         TaskCompletion completion = new TaskCompletion(task.taskId);
         messageRouter.sendMessage(server, eventReactor.wrapEvent(completion));
-        //TODO: we should wake up the scheduler thread here
+        monitorThread.interrupt();
     }
 
     protected synchronized int getNumActive() {
