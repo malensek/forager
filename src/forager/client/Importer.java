@@ -29,14 +29,23 @@ public class Importer {
 
     private List<String> tasks = new ArrayList<>();
 
-    public void submitTasks(NetworkDestination server)
+    private boolean successful;
+
+    public boolean submitTasks(NetworkDestination server)
     throws Exception {
         ClientMessageRouter messageRouter = new ClientMessageRouter();
         messageRouter.addListener(eventReactor);
         ImportRequest request = new ImportRequest(tasks);
+
         messageRouter.sendMessage(server, eventReactor.wrapEvent(request));
         eventReactor.processNextEvent();
+        boolean result = successful;
+
+        successful = false;
+        tasks.clear();
         messageRouter.shutdown();
+
+        return result;
     }
 
     @EventHandler
