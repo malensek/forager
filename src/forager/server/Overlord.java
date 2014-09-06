@@ -52,6 +52,8 @@ public class Overlord {
 
     private static final Logger logger = Logger.getLogger("forager");
 
+    public static final int DEFAULT_PORT = 53380;
+
     private int port;
     private ServerMessageRouter messageRouter;
 
