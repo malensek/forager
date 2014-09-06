@@ -68,10 +68,4 @@ public class Importer {
         br.close();
         return added;
     }
-
-    public static void main(String[] args) throws Exception {
-        Importer i = new Importer();
-        i.addTaskFile(args[0]);
-        i.submitTasks(new NetworkDestination("localhost", Launcher.DEFAULT_PORT));
-    }
 }
