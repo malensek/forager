@@ -60,10 +60,6 @@ public class Forager {
     private int pendingRequests = 0;
     protected ExecutorService threadPool;
 
-    public Forager(NetworkDestination server) {
-        this(server, 4);
-    }
-
     public Forager(NetworkDestination server, int threads) {
         this.server = server;
         this.maxTasks = threads;
