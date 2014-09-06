@@ -1,86 +1,87 @@
 package forager.ui;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.UnrecognizedOptionException;
+import java.util.Map;
 
-import forager.client.Forager;
-import forager.server.Overlord;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.Parameters;
 
-import galileo.net.NetworkDestination;
-
+@Parameters(separators = "=")
 public class Launcher {
 
-    public static final int DEFAULT_PORT = 53380;
+    @Parameter(names = { "-h", "--help" }, description = "help")
+    public String helpCommand;
 
-    public static void main(String[] args)
-    throws Exception {
-        CommandLineParser parser = new GnuParser();
-        Options options = new Options();
+    private static JCommander jc;
 
-        options.addOption("s", "server", false,
-                "Start a server daemon");
-        options.addOption("p", "port", true,
-                "Specifies the port to connect to or listen on.");
-        options.addOption("t", "threads", true,
-                "Maximum number of threads to use (client only)");
+    private static final String appName = "forager";
 
-        CommandLine cl = null;
+    public static void main(String[] args) throws Exception {
+
+        Launcher l = new Launcher();
+        jc = new JCommander(l);
+        jc.setProgramName(appName);
+
+        Client client = new Client();
+        Server server = new Server();
+        Import importer = new Import();
+
+        jc.addCommand("client", client);
+        jc.addCommand("server", server);
+        jc.addCommand("import", importer);
+
         try {
-            cl = parser.parse(options, args);
-        } catch (UnrecognizedOptionException e) {
-            printUsage();
-        }
+            jc.parse(args);
 
-        if (cl.hasOption("server")) {
-            Overlord server = new Overlord(getPort(cl));
-            server.start();
-        } else {
-            Forager client;
+            Map<String, JCommander> cmds = jc.getCommands();
 
-            String[] clientArgs = cl.getArgs();
-            if (args.length < 1) {
-                printUsage();
-            }
-            NetworkDestination server = new NetworkDestination(
-                    clientArgs[0], getPort(cl));
-
-            if (cl.hasOption("threads")) {
-                int threads = Integer.parseInt(cl.getOptionValue("threads"));
-                client = new Forager(server, threads);
-            } else {
-                client = new Forager(server);
+            if (l.helpCommand != null) {
+                JCommander command = cmds.get(l.helpCommand);
+                if (command != null) {
+                    command.usage();
+                    System.exit(1);
+                }
             }
 
-            client.start();
+            JCommander command = cmds.get(jc.getParsedCommand());
+            if (command == null) {
+                usage();
+            }
+
+            CommandLauncher cl = (CommandLauncher) command.getObjects().get(0);
+            cl.launch();
+
+        } catch (Exception e) {
+            usage(e.getMessage());
         }
-        System.out.println(cl.getArgs()[0]);
-        HelpFormatter formatter = new HelpFormatter();
-        formatter.printHelp("ant", options);
     }
 
-    private static int getPort(CommandLine cl) {
-        int port;
-        if (cl.hasOption("port")) {
-            port = Integer.parseInt(cl.getOptionValue("port"));
-        } else {
-            port = DEFAULT_PORT;
-        }
-
-        return port;
+    private static void usage() {
+        usage("");
     }
 
-    private static void printUsage() {
-        printUsage(true);
-    }
+    private static void usage(String message) {
+        StringBuilder sb = new StringBuilder();
+        String nl = System.lineSeparator();
 
-    private static void printUsage(boolean exit) {
-        //TODO
-        if (exit) {
-            System.exit(1);
+        if (message.equals("") == false) {
+            sb.append(message + nl);
         }
+
+        sb.append("Usage: " + appName + " command [command options]" + nl);
+        sb.append(nl);
+        sb.append("  Commands:  ");
+        sb.append("('forager --help command' for specific command info)"
+                + nl + nl);
+
+        Map<String, JCommander> commands = jc.getCommands();
+        for (String cmd : commands.keySet()) {
+            sb.append("    " + cmd + "    ");
+            sb.append(jc.getCommandDescription(cmd) + nl);
+            commands.get(cmd).usage(sb, "    ");
+            sb.append(nl);
+        }
+        System.out.println(sb.toString());
+        System.exit(1);
     }
 }
