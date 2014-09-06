@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,7 +51,14 @@ public class Importer {
  
     public void addTaskFile(String file)
     throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        FileReader reader = new FileReader(file);
+        int numTasks = readTaskData(reader);
+        System.out.println("Importing " + numTasks + " tasks from " + file);
+    }
+ 
+    public int readTaskData(InputStreamReader reader)
+    throws IOException {
+        BufferedReader br = new BufferedReader(reader);
         int added = 0;
         String line;
         while ((line = br.readLine()) != null) {
@@ -58,8 +66,7 @@ public class Importer {
             added++;
         }
         br.close();
-
-        System.out.println("Importing " + added + " tasks from file: " + file);
+        return added;
     }
 
     public static void main(String[] args) throws Exception {
