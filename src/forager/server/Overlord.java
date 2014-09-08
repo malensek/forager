@@ -127,6 +127,12 @@ public class Overlord {
         logger.log(Level.INFO, "Task {0} completed by {1}",
                 new Object[] { completedTask.taskId, context.getSource() });
 
+        finishedTasks++;
+        System.out.println(finishedTasks + " of " + taskSerial + " completed "
+                + "(" + completionPercentage() + "%)");
+        System.out.println(activeTasks.size() + " active tasks.");
+
+        activeTasks.remove(completedTask.taskId);
     }
 
     @EventHandler
@@ -145,5 +151,9 @@ public class Overlord {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private float completionPercentage() {
+        return (float) finishedTasks / taskSerial * 100;
     }
 }
