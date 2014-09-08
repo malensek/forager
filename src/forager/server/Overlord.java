@@ -109,6 +109,9 @@ public class Overlord {
                 return;
             }
 
+            /* Once we've reached this point, we'll update our data structures.
+             * This doesn't necessarily mean that the job has been successfully
+             * deployed to the client, but we'll assume so for now. */
             pendingTasks.remove(task.taskId);
             activeTasks.put(task.taskId, task);
             task.addAssignment(context.getSource());
