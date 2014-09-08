@@ -57,8 +57,10 @@ public class Overlord {
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
     private long taskSerial = 0;
-    private long taskPointer = 0;
+    private long finishedTasks = 0;
+
     private Map<Long, TaskSpec> pendingTasks = new HashMap<>();
+    private Map<Long, TaskSpec> activeTasks = new HashMap<>();
 
     public Overlord(int port) {
         this.port = port;
