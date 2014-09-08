@@ -62,7 +62,7 @@ public class Overlord {
 
     private long taskSerial = 0;
     private long taskPointer = 0;
-    private Map<Long, TaskSpec> tasks = new HashMap<>();
+    private Map<Long, TaskSpec> pendingTasks = new HashMap<>();
 
     public Overlord(int port) {
         this.port = port;
@@ -80,12 +80,13 @@ public class Overlord {
     }
 
     private void addTask(String command) {
-        TaskSpec task = new TaskSpec(taskSerial++, command);
-        tasks.put(task.taskId, task);
+        long taskId = taskSerial++;
+        TaskSpec task = new TaskSpec(taskId, command);
+        pendingTasks.put(taskId, task);
     }
 
     private TaskSpec getNextTask() {
-        Iterator<Long> idIterator = tasks.keySet().iterator();
+        Iterator<Long> idIterator = pendingTasks.keySet().iterator();
 
         if (idIterator.hasNext() != true) {
             /* We have no tasks to assign.  Return an 'idle' task */
@@ -93,9 +94,7 @@ public class Overlord {
         }
 
         Long id = idIterator.next();
-        TaskSpec task = tasks.remove(id);
-        activeTasks.put(id, task);
-        return task;
+        return pendingTasks.get(id);
     }
 
     @EventHandler
@@ -106,14 +105,17 @@ public class Overlord {
 
         for (int i = 0; i < request.numTasks; ++i) {
             TaskSpec task = getNextTask();
-            task.addAssignment(context.getSource());
 
             try {
                 context.sendReply(task);
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Error assigning task.", e);
-                task.removeAssignment(context.getSource());
+                return;
             }
+
+            pendingTasks.remove(task.taskId);
+            activeTasks.put(task.taskId, task);
+            task.addAssignment(context.getSource());
         }
     }
 
