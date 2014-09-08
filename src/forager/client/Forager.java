@@ -114,7 +114,7 @@ public class Forager {
         pendingRequests--;
 
         if (taskSpec.taskId == -1) {
-            logger.log(Level.INFO, "Received idle task");
+            logger.log(Level.FINE, "Received idle task");
             return;
         }
 
