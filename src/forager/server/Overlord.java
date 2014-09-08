@@ -57,7 +57,7 @@ public class Overlord {
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
     private long taskSerial = 0;
-    private long finishedTasks = 0;
+    private long completedTasks = 0;
 
     private Map<Long, TaskSpec> pendingTasks = new HashMap<>();
     private Map<Long, TaskSpec> activeTasks = new HashMap<>();
@@ -127,8 +127,8 @@ public class Overlord {
         logger.log(Level.INFO, "Task {0} completed by {1}",
                 new Object[] { completedTask.taskId, context.getSource() });
 
-        finishedTasks++;
-        System.out.println(finishedTasks + " of " + taskSerial + " completed "
+        completedTasks++;
+        System.out.println(completedTasks + " of " + taskSerial + " completed "
                 + "(" + completionPercentage() + "%)");
         System.out.println(activeTasks.size() + " active tasks.");
 
@@ -154,6 +154,6 @@ public class Overlord {
     }
 
     private float completionPercentage() {
-        return (float) finishedTasks / taskSerial * 100;
+        return (float) completedTasks / taskSerial * 100;
     }
 }
