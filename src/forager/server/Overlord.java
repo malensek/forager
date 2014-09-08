@@ -85,28 +85,17 @@ public class Overlord {
     }
 
     private TaskSpec getNextTask() {
-        if (tasks.size() == 0) {
+        Iterator<Long> idIterator = tasks.keySet().iterator();
+
+        if (idIterator.hasNext() != true) {
             /* We have no tasks to assign.  Return an 'idle' task */
             return new TaskSpec(-1, "");
         }
 
-        TaskSpec task = tasks.get(taskPointer);
-        if (task != null) {
-            taskPointer++;
-            return task;
-        } else {
-            /* Current pointer didn't have an assignable task for us. We need to
-             * find the next assignable task by iterating through the map. */
-            for (TaskSpec taskSpec : tasks.values()) {
-                if (taskSpec.isAssigned() == false) {
-                    taskPointer = taskSpec.taskId + 1;
-                    return taskSpec;
-                }
-            }
-            /* No unassigned tasks were found */
-            //TODO check assignment times and re-assign. for now, schedule idle.
-            return new TaskSpec(-1, "");
-        }
+        Long id = idIterator.next();
+        TaskSpec task = tasks.remove(id);
+        activeTasks.put(id, task);
+        return task;
     }
 
     @EventHandler
