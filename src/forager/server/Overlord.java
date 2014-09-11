@@ -103,7 +103,11 @@ public class Overlord {
     @EventHandler
     public void processTaskRequest(TaskRequest request, EventContext context) {
 
-        logger.log(Level.INFO, "{0} tasks requested by {1}",
+        Level logLevel = Level.INFO;
+        if (pendingTasks.size() == 0) {
+            logLevel = Level.FINE;
+        }
+        logger.log(logLevel, "{0} tasks requested by {1}",
                 new Object[] { request.numTasks, context.getSource() });
 
         for (int i = 0; i < request.numTasks; ++i) {
