@@ -6,6 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+/**
+ * Handles the active and completed task lists and allows them to be flushed
+ * and synced to disk.
+ *
+ * @author malensek
+ */
 public class ListManager {
 
     public static final String DEFAULT_LIST_NAME = "tasklist";
