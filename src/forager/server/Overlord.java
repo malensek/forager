@@ -158,8 +158,4 @@ public class Overlord {
             e.printStackTrace();
         }
     }
-
-    private float completionPercentage() {
-        return (float) completedTasks / taskSerial * 100;
-    }
 }
