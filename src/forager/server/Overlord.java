@@ -56,6 +56,8 @@ public class Overlord {
     private ForagerEventMap eventMap = new ForagerEventMap();
     private EventReactor eventReactor = new EventReactor(this, eventMap);
 
+    private ListManager listManager;
+
     private long taskSerial = 0;
     private long completedTasks = 0;
 
@@ -72,6 +74,8 @@ public class Overlord {
         messageRouter.addListener(eventReactor);
         messageRouter.listen(this.port);
 
+        listManager = new ListManager();
+
         while (true) {
             eventReactor.processNextEvent();
         }
@@ -81,6 +85,7 @@ public class Overlord {
         long taskId = taskSerial++;
         TaskSpec task = new TaskSpec(taskId, command);
         pendingTasks.put(taskId, task);
+        listManager.addTask(command);
     }
 
     private TaskSpec getNextTask() {
@@ -147,6 +152,7 @@ public class Overlord {
         }
 
         try {
+            listManager.sync();
             context.sendReply(new ImportResponse(true));
         } catch (IOException e) {
             e.printStackTrace();
