@@ -133,11 +133,12 @@ public class Overlord {
                 new Object[] { completedTask.taskId, context.getSource() });
 
         completedTasks++;
-        System.out.println(completedTasks + " of " + taskSerial + " completed "
-                + "(" + completionPercentage() + "%)");
-        System.out.println(activeTasks.size() + " active tasks.");
 
-        activeTasks.remove(completedTask.taskId);
+        logger.log(Level.INFO, "{0} tasks remaining.",
+                taskSerial - completedTasks);
+
+        TaskSpec task = activeTasks.remove(completedTask.taskId);
+        listManager.addCompletedTask(task.command);
     }
 
     @EventHandler
