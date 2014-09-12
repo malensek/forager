@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 /**
  * Handles the active and completed task lists and allows them to be flushed
@@ -72,5 +73,14 @@ public class ListManager {
         File listFile = new File(taskListName);
         File doneFile = new File(taskListName + COMPLETED_EXT);
         return (listFile.exists() || doneFile.exists());
+    }
+
+    public static List<String> getPendingTasks() {
+        return getPendingTasks(DEFAULT_LIST_NAME);
+    }
+
+    public static List<String> getPendingTasks(String taskListName) {
+
+        return null;
     }
 }
