@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 public class ListManager {
 
     public static final String DEFAULT_LIST_NAME = "tasklist";
+    private static final String COMPLETED_EXT = ".done";
 
     private FileOutputStream taskListOut;
     private PrintWriter taskListWriter;
@@ -31,7 +32,7 @@ public class ListManager {
         taskListWriter = new PrintWriter(
                 new BufferedOutputStream(taskListOut));
 
-        String completedName = taskListName + ".done";
+        String completedName = taskListName + COMPLETED_EXT;
         completedListOut = new FileOutputStream(completedName, true);
         completedListWriter = new PrintWriter(
                 new BufferedOutputStream(completedListOut));
@@ -56,7 +57,7 @@ public class ListManager {
 
     public static boolean listsExist(String taskListName) {
         File listFile = new File(taskListName);
-        File doneFile = new File(taskListName + ".done");
+        File doneFile = new File(taskListName + COMPLETED_EXT);
         return (listFile.exists() || doneFile.exists());
     }
 }
