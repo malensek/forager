@@ -49,4 +49,14 @@ public class ListManager {
         taskListWriter.flush();
         taskListOut.getFD().sync();
     }
+
+    public static boolean listsExist() {
+        return listsExist(DEFAULT_LIST_NAME);
+    }
+
+    public static boolean listsExist(String taskListName) {
+        File listFile = new File(taskListName);
+        File doneFile = new File(taskListName + ".done");
+        return (listFile.exists() || doneFile.exists());
+    }
 }
