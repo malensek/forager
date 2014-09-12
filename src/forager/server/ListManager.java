@@ -24,8 +24,14 @@ public class ListManager {
     private FileOutputStream completedListOut;
     private PrintWriter completedListWriter;
 
-    public ListManager() throws IOException {
+    public ListManager()
+    throws IOException {
         this(DEFAULT_LIST_NAME);
+    }
+
+    public ListManager(boolean resume)
+    throws IOException {
+        this(DEFAULT_LIST_NAME, resume);
     }
 
     public ListManager(String taskListName)
