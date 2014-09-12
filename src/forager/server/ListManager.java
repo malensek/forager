@@ -2,6 +2,7 @@
 package forager.server;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -27,7 +28,13 @@ public class ListManager {
         this(DEFAULT_LIST_NAME);
     }
 
-    public ListManager(String taskListName) throws IOException {
+    public ListManager(String taskListName)
+    throws IOException {
+        this(taskListName, true);
+    }
+
+    public ListManager(String taskListName, boolean resume)
+    throws IOException {
         taskListOut = new FileOutputStream(taskListName, true);
         taskListWriter = new PrintWriter(
                 new BufferedOutputStream(taskListOut));
