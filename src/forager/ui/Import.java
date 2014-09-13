@@ -21,7 +21,7 @@ public class Import implements CommandLauncher {
     private List<String> files = new ArrayList<>();
 
     @Parameter(names = { "-p", "--port" }, description = "Server port")
-    private int port = Overlord.DEFAULT_PORT;
+    private int port = Server.DEFAULT_PORT;
 
     @Parameter(names = { "-s", "--server" },
             description = "Server to submit imported tasks to")
