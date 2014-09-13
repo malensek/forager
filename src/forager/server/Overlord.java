@@ -28,6 +28,7 @@ package forager.server;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,10 +68,24 @@ public class Overlord {
         this(port, taskList, false);
     }
 
-    public Overlord(int port, String taskList, boolean clearList)
+    public Overlord(int port, String taskList, boolean resetList)
     throws IOException {
         this.port = port;
-        listManager = new ListManager(taskList);
+
+        boolean append = !(resetList);
+        listManager = new ListManager(taskList, append);
+        if (resetList == false) {
+            /* Read pending tasks from the tasklist on disk. */
+            List<String> diskPending = listManager.readPendingTasks();
+            if (diskPending.size() > 0) {
+                logger.log(Level.INFO, "Read {0} pending tasks from disk.",
+                        diskPending.size());
+            }
+
+            for (String task : diskPending) {
+                addTask(task, false);
+            }
+        }
     }
 
     public void start()
