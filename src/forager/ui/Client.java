@@ -8,7 +8,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import forager.client.Forager;
-import forager.server.Overlord;
 
 import galileo.net.NetworkDestination;
 
@@ -20,7 +19,7 @@ public class Client implements CommandLauncher {
     private List<String> hostname = new ArrayList<>();
 
     @Parameter(names = { "-p", "--port" }, description = "Server port")
-    private int port = Overlord.DEFAULT_PORT;
+    private int port = Server.DEFAULT_PORT;
 
     @Parameter(names = { "-t", "--threads" }, description = "Maximum number "
             + "of threads the forager daemon can use")
