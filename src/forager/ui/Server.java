@@ -9,8 +9,9 @@ import forager.server.Overlord;
         commandDescription = "Starts a forager master server")
 public class Server implements CommandLauncher {
 
+    public static final int DEFAULT_PORT = 53380;
     @Parameter(names = { "-p", "--port" }, description = "Server port")
-    private int port = Overlord.DEFAULT_PORT;
+    private int port = DEFAULT_PORT;
 
     @Override
     public void launch() throws Exception {
