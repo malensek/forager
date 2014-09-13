@@ -10,7 +10,7 @@ import forager.server.Overlord;
 public class Server implements CommandLauncher {
 
     public static final int DEFAULT_PORT = 53380;
-    public static final String DEFAULT_TASKLIST = "tasklist";
+    public static final String DEFAULT_TASKLIST = "./tasklist";
 
     @Parameter(names = { "-p", "--port" }, description = "Server port")
     private int port = DEFAULT_PORT;
