@@ -64,6 +64,11 @@ public class Overlord {
 
     public Overlord(int port, String taskList)
     throws IOException {
+        this(port, taskList, false);
+    }
+
+    public Overlord(int port, String taskList, boolean clearList)
+    throws IOException {
         this.port = port;
         listManager = new ListManager(taskList);
     }

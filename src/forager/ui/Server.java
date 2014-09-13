@@ -12,6 +12,10 @@ public class Server implements CommandLauncher {
     public static final int DEFAULT_PORT = 53380;
     public static final String DEFAULT_TASKLIST = "./tasklist";
 
+    @Parameter(names = { "-r", "--reset" },
+            description = "Reset (clear) the task list")
+    private boolean clear = false;
+
     @Parameter(names = { "-p", "--port" }, description = "Server port")
     private int port = DEFAULT_PORT;
 
@@ -21,7 +25,7 @@ public class Server implements CommandLauncher {
 
     @Override
     public void launch() throws Exception {
-        Overlord server = new Overlord(port, taskList);
+        Overlord server = new Overlord(port, taskList, clear);
         server.start();
     }
 }
