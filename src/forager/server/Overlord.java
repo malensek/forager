@@ -155,7 +155,7 @@ public class Overlord {
         }
 
         try {
-            listManager.sync();
+            listManager.syncTasks();
             context.sendReply(new ImportResponse(true));
         } catch (IOException e) {
             e.printStackTrace();

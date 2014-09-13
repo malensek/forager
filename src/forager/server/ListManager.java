@@ -39,7 +39,8 @@ public class ListManager {
         completedListWriter.println(command);
     }
 
-    public void sync() throws IOException {
+    public void syncTasks()
+    throws IOException {
         taskListWriter.flush();
         taskListOut.getFD().sync();
     }
