@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,18 +73,22 @@ public class ListManager {
         completedListOut.getFD().sync();
     }
 
-    public static boolean listsExist(String taskListName) {
-        File listFile = new File(taskListName);
-        File doneFile = new File(taskListName + COMPLETED_EXT);
+    public boolean listsExist() {
+        File listFile = new File(this.taskListName);
+        File doneFile = new File(this.taskListName + COMPLETED_EXT);
         return (listFile.exists() || doneFile.exists());
     }
 
-    public static List<String> getPendingTasks(String taskListName)
+    public List<String> readPendingTasks()
     throws IOException {
+        if (listsExist() != true) {
+            return new ArrayList<>();
+        }
+
         List<String> allTasks = Files.readAllLines(
-                Paths.get(taskListName), Charset.defaultCharset());
+                Paths.get(this.taskListName), Charset.defaultCharset());
         List<String> completedTasks = Files.readAllLines(
-                Paths.get(taskListName + COMPLETED_EXT));
+                Paths.get(this.taskListName + COMPLETED_EXT));
 
         for (String command : completedTasks) {
             boolean result = allTasks.remove(command);
