@@ -48,8 +48,6 @@ public class Overlord {
 
     private static final Logger logger = Logger.getLogger("forager");
 
-    public static final int DEFAULT_PORT = 53380;
-
     private int port;
     private ServerMessageRouter messageRouter;
 
@@ -64,8 +62,10 @@ public class Overlord {
     private Map<Long, TaskSpec> pendingTasks = new HashMap<>();
     private Map<Long, TaskSpec> activeTasks = new HashMap<>();
 
-    public Overlord(int port) {
+    public Overlord(int port, String taskList)
+    throws IOException {
         this.port = port;
+        listManager = new ListManager(taskList);
     }
 
     public void start()
@@ -73,8 +73,6 @@ public class Overlord {
         messageRouter = new ServerMessageRouter();
         messageRouter.addListener(eventReactor);
         messageRouter.listen(this.port);
-
-        listManager = new ListManager();
 
         while (true) {
             eventReactor.processNextEvent();
