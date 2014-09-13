@@ -129,7 +129,7 @@ public class Overlord {
 
     @EventHandler
     public void processCompletedTask(
-            TaskCompletion completedTask, EventContext context) {
+            TaskCompletion completedTask, EventContext context) throws IOException {
 
         logger.log(Level.INFO, "Task {0} completed by {1}",
                 new Object[] { completedTask.taskId, context.getSource() });
@@ -141,6 +141,7 @@ public class Overlord {
 
         TaskSpec task = activeTasks.remove(completedTask.taskId);
         listManager.addCompletedTask(task.command);
+        listManager.syncCompleted();
     }
 
     @EventHandler

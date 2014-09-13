@@ -44,4 +44,10 @@ public class ListManager {
         taskListWriter.flush();
         taskListOut.getFD().sync();
     }
+
+    public void syncCompleted()
+    throws IOException {
+        completedListWriter.flush();
+        completedListOut.getFD().sync();
+    }
 }
