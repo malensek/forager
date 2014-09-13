@@ -44,7 +44,7 @@ public class ListManager {
         taskListWriter = new PrintWriter(
                 new BufferedOutputStream(taskListOut));
 
-        String completedName = taskListName + ".done";
+        String completedName = taskListName + COMPLETED_EXT;
         completedListOut = new FileOutputStream(completedName, append);
         completedListWriter = new PrintWriter(
                 new BufferedOutputStream(completedListOut));
