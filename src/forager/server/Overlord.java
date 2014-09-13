@@ -89,13 +89,17 @@ public class Overlord {
     }
 
     public void start()
-    throws IOException, Exception {
+    throws IOException {
         messageRouter = new ServerMessageRouter();
         messageRouter.addListener(eventReactor);
         messageRouter.listen(this.port);
 
         while (true) {
-            eventReactor.processNextEvent();
+            try {
+                eventReactor.processNextEvent();
+            } catch (Exception e) {
+                logger.log(Level.WARNING, "Event triggered an exception", e);
+            }
         }
     }
 
