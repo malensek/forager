@@ -20,13 +20,21 @@ public class ListManager {
     private FileOutputStream completedListOut;
     private PrintWriter completedListWriter;
 
-    public ListManager(String taskListName) throws IOException {
-        taskListOut = new FileOutputStream(taskListName, true);
+    public ListManager(String taskListName)
+    throws IOException {
+        this(taskListName, false);
+    }
+
+    public ListManager(String taskListName, boolean clearExisting)
+    throws IOException {
+        boolean append = !(clearExisting);
+
+        taskListOut = new FileOutputStream(taskListName, append);
         taskListWriter = new PrintWriter(
                 new BufferedOutputStream(taskListOut));
 
         String completedName = taskListName + ".done";
-        completedListOut = new FileOutputStream(completedName, true);
+        completedListOut = new FileOutputStream(completedName, append);
         completedListWriter = new PrintWriter(
                 new BufferedOutputStream(completedListOut));
     }
