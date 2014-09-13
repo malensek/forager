@@ -15,8 +15,8 @@ public class Server implements CommandLauncher {
     @Parameter(names = { "-p", "--port" }, description = "Server port")
     private int port = DEFAULT_PORT;
 
-    @Parameter(names = { "-t", "--task-list" },
-            description = "Task list location")
+    @Parameter(names = { "-t", "--task-list", "--tasklist" },
+            description = "Path to the task list (created if it doesn't exist)")
     private String taskList = DEFAULT_TASKLIST;
 
     @Override
