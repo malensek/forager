@@ -85,10 +85,16 @@ public class Overlord {
     }
 
     private void addTask(String command) {
+        addTask(command, true);
+    }
+
+    private void addTask(String command, boolean writeToDisk) {
         long taskId = taskSerial++;
         TaskSpec task = new TaskSpec(taskId, command);
         pendingTasks.put(taskId, task);
-        listManager.addTask(command);
+        if (writeToDisk) {
+            listManager.addTask(command);
+        }
     }
 
     private TaskSpec getNextTask() {
