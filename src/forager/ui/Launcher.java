@@ -3,17 +3,10 @@ package forager.ui;
 import java.util.Map;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
 
-@Parameters(separators = "=")
 public class Launcher {
 
-    @Parameter(names = { "-h", "--help" }, description = "help")
-    public String helpCommand;
-
     private static JCommander jc;
-
     private static final String appName = "forager";
 
     public static void main(String[] args) throws Exception {
@@ -30,18 +23,10 @@ public class Launcher {
         jc.addCommand("server", server);
         jc.addCommand("import", importer);
 
+        Map<String, JCommander> cmds = jc.getCommands();
+
         try {
             jc.parse(args);
-
-            Map<String, JCommander> cmds = jc.getCommands();
-
-            if (l.helpCommand != null) {
-                JCommander command = cmds.get(l.helpCommand);
-                if (command != null) {
-                    command.usage();
-                    System.exit(1);
-                }
-            }
 
             JCommander command = cmds.get(jc.getParsedCommand());
             if (command == null) {
@@ -52,7 +37,12 @@ public class Launcher {
             cl.launch();
 
         } catch (Exception e) {
-            usage(e.getMessage());
+            if (jc.getParsedCommand() != null) {
+                JCommander cmd = cmds.get(jc.getParsedCommand());
+                usage(cmd, e.getMessage());
+            } else {
+                usage(e.getMessage());
+            }
         }
     }
 
@@ -83,5 +73,12 @@ public class Launcher {
         }
         System.out.println(sb.toString());
         System.exit(1);
+    }
+
+    private static void usage(JCommander jc, String message) {
+        if (message.equals("") == false) {
+            System.out.println(message);
+        }
+        jc.usage();
     }
 }
