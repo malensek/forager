@@ -14,17 +14,11 @@ import java.io.PrintWriter;
  */
 public class ListManager {
 
-    public static final String DEFAULT_LIST_NAME = "tasklist";
-
     private FileOutputStream taskListOut;
     private PrintWriter taskListWriter;
 
     private FileOutputStream completedListOut;
     private PrintWriter completedListWriter;
-
-    public ListManager() throws IOException {
-        this(DEFAULT_LIST_NAME);
-    }
 
     public ListManager(String taskListName) throws IOException {
         taskListOut = new FileOutputStream(taskListName, true);
