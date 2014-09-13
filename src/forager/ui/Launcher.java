@@ -59,10 +59,6 @@ public class Launcher {
         }
 
         sb.append("Usage: " + appName + " command [command options]" + nl);
-        sb.append(nl);
-        sb.append("  Commands:  ");
-        sb.append("('forager --help command' for specific command info)"
-                + nl + nl);
 
         Map<String, JCommander> commands = jc.getCommands();
         for (String cmd : commands.keySet()) {
@@ -71,7 +67,7 @@ public class Launcher {
             commands.get(cmd).usage(sb, "    ");
             sb.append(nl);
         }
-        System.out.println(sb.toString());
+        System.out.print(sb.toString());
         System.exit(1);
     }
 
