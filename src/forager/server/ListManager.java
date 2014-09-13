@@ -25,6 +25,8 @@ public class ListManager {
 
     private static final String COMPLETED_EXT = ".done";
 
+    private String taskListName;
+
     private FileOutputStream taskListOut;
     private PrintWriter taskListWriter;
 
@@ -33,12 +35,12 @@ public class ListManager {
 
     public ListManager(String taskListName)
     throws IOException {
-        this(taskListName, false);
+        this(taskListName, true);
     }
 
-    public ListManager(String taskListName, boolean clearExisting)
+    public ListManager(String taskListName, boolean append)
     throws IOException {
-        boolean append = !(clearExisting);
+        this.taskListName = taskListName;
 
         taskListOut = new FileOutputStream(taskListName, append);
         taskListWriter = new PrintWriter(
