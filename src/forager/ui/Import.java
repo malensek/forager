@@ -9,7 +9,6 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import forager.client.Importer;
-import forager.server.Overlord;
 
 import galileo.net.NetworkDestination;
 
@@ -36,14 +35,14 @@ public class Import implements CommandLauncher {
                 System.out.println("Importing " + numTasks + " tasks "
                         + "from file: " + file);
             }
+        } else if (System.console() == null) {
+            /* Something is being piped in */
+            InputStreamReader reader = new InputStreamReader(System.in);
+            int numTasks = i.addFromInputStream(reader);
+            System.out.println("Importing " + numTasks + " tasks "
+                    + "from stdin.");
         } else {
-            if (System.console() == null) {
-                /* Something is being piped in */
-                InputStreamReader reader = new InputStreamReader(System.in);
-                int numTasks = i.addFromInputStream(reader);
-                System.out.println("Importing " + numTasks + " tasks "
-                        + "from stdin.");
-            }
+            throw new Exception("No input files specified or data from stdin.");
         }
         boolean result = i.submitTasks(new NetworkDestination(server, port));
         if (result == true) {
