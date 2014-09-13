@@ -94,6 +94,8 @@ public class Overlord {
         messageRouter.addListener(eventReactor);
         messageRouter.listen(this.port);
 
+        logger.info("Forager server online.");
+
         while (true) {
             try {
                 eventReactor.processNextEvent();
