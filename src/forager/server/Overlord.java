@@ -176,8 +176,7 @@ public class Overlord {
 
         completedTasks++;
 
-        logger.log(Level.INFO, "{0} tasks remaining.",
-                taskSerial - completedTasks);
+        logger.log(Level.INFO, "{0} tasks remaining.", tasksRemaining());
 
         TaskSpec task = activeTasks.remove(completion.taskId);
         listManager.addCompletedTask(task.command);
@@ -222,5 +221,9 @@ public class Overlord {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private long tasksRemaining() {
+        return taskSerial - completedTasks - permanentFailures;
     }
 }
