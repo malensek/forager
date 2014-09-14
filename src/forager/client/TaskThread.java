@@ -23,9 +23,9 @@ public class TaskThread implements Runnable {
             pb.redirectError(Redirect.INHERIT);
 
             Process p = pb.start();
-            int i = p.waitFor();
+            int exitCode = p.waitFor();
 
-            forager.finalizeTask(task);
+            forager.finalizeTask(task, exitCode);
         } catch (Exception e) {
             e.printStackTrace();
         }

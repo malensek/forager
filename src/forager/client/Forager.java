@@ -88,11 +88,15 @@ public class Forager {
         messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
     }
 
-    protected synchronized void finalizeTask(TaskSpec task)
+    protected synchronized void finalizeTask(TaskSpec task, int exitCode)
     throws IOException {
         System.out.println("Received task completion notification: " + task);
+        if (exitCode != 0) {
+            System.out.println("Task exited with error code: " + exitCode);
+        }
         activeTasks--;
-        TaskCompletion completion = new TaskCompletion(task.taskId);
+
+        TaskCompletion completion = new TaskCompletion(task.taskId, exitCode);
         messageRouter.sendMessage(server, eventReactor.wrapEvent(completion));
         monitorThread.interrupt();
     }
