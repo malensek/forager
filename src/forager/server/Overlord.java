@@ -43,6 +43,7 @@ import forager.events.TaskSpec;
 import galileo.event.EventContext;
 import galileo.event.EventHandler;
 import galileo.event.EventReactor;
+import galileo.net.NetworkDestination;
 import galileo.net.ServerMessageRouter;
 
 public class Overlord {
@@ -59,6 +60,7 @@ public class Overlord {
 
     private long taskSerial = 0;
     private long completedTasks = 0;
+    private long permanentFailures = 0;
 
     private Map<Long, TaskSpec> pendingTasks = new HashMap<>();
     private Map<Long, TaskSpec> activeTasks = new HashMap<>();
@@ -155,25 +157,52 @@ public class Overlord {
              * deployed to the client, but we'll assume so for now. */
             pendingTasks.remove(task.taskId);
             activeTasks.put(task.taskId, task);
-            task.addAssignment(context.getSource());
+            task.assignments.add(context.getSource());
         }
     }
 
     @EventHandler
     public void processCompletedTask(
-            TaskCompletion completedTask, EventContext context) throws IOException {
+            TaskCompletion completion, EventContext context)
+    throws IOException {
+
+        if (completion.exitCode != 0) {
+            processTaskFailure(completion, context);
+            return;
+        }
 
         logger.log(Level.INFO, "Task {0} completed by {1}",
-                new Object[] { completedTask.taskId, context.getSource() });
+                new Object[] { completion.taskId, context.getSource() });
 
         completedTasks++;
 
         logger.log(Level.INFO, "{0} tasks remaining.",
                 taskSerial - completedTasks);
 
-        TaskSpec task = activeTasks.remove(completedTask.taskId);
+        TaskSpec task = activeTasks.remove(completion.taskId);
         listManager.addCompletedTask(task.command);
         listManager.syncCompleted();
+    }
+
+    private void processTaskFailure(
+            TaskCompletion completion, EventContext context) {
+
+        logger.log(Level.WARNING, "Task {0} FAILED at {1}",
+                new Object[] { completion.taskId, context.getSource() });
+
+        TaskSpec task = activeTasks.remove(completion.taskId);
+        if (task.assignments.size() > 3) {
+            permanentFailures++;
+            Iterator<NetworkDestination> it = task.assignments.iterator();
+            logger.log(Level.SEVERE,
+                    "Task {0} failed 3 times at (1) {1}; (2) {2}; (3) {3}",
+                    new Object[] {
+                        task.taskId, it.next(), it.next(), it.next() });
+            logger.log(Level.SEVERE, "Marking task {0} as permanently failed.",
+                    task.taskId);
+        } else {
+            pendingTasks.put(task.taskId, task);
+        }
     }
 
     @EventHandler
