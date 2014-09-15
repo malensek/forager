@@ -116,7 +116,11 @@ public class Overlord {
         TaskSpec task = new TaskSpec(taskId, command);
         pendingTasks.put(taskId, task);
         if (writeToDisk) {
-            listManager.addTask(command);
+            try {
+                listManager.addTask(command);
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "Could not write task to disk!", e);
+            }
         }
     }
 
@@ -199,6 +203,13 @@ public class Overlord {
                         task.taskId, it.next(), it.next(), it.next() });
             logger.log(Level.SEVERE, "Marking task {0} as permanently failed.",
                     task.taskId);
+
+            try {
+                listManager.addFailedTask(task.command);
+            } catch (IOException e) {
+                logger.log(Level.WARNING,
+                        "Could not log failed task to disk.", e);
+            }
         } else {
             pendingTasks.put(task.taskId, task);
         }
