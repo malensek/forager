@@ -194,7 +194,7 @@ public class Overlord {
             permanentFailures++;
             Iterator<NetworkDestination> it = task.assignments.iterator();
             logger.log(Level.SEVERE,
-                    "Task {0} failed 3 times at (1) {1}; (2) {2}; (3) {3}",
+                    "Task {0} failed 3 times at {1}; {2}; {3}",
                     new Object[] {
                         task.taskId, it.next(), it.next(), it.next() });
             logger.log(Level.SEVERE, "Marking task {0} as permanently failed.",
