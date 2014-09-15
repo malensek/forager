@@ -127,21 +127,4 @@ public class Forager {
         TaskThread thread = new TaskThread(taskSpec, this);
         threadPool.submit(thread);
     }
-
-    public static void main(String[] args)
-    throws Exception {
-        if (args.length < 3) {
-            System.out.println("Usage: forager.client.Forager <host> <port>");
-            System.exit(1);
-        }
-
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-        NetworkDestination overlord = new NetworkDestination(host, port);
-
-        int threads = Integer.parseInt(args[2]);
-
-        Forager forager = new Forager(overlord, threads);
-        forager.start();
-    }
 }
