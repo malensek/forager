@@ -90,9 +90,13 @@ public class Forager {
 
     protected synchronized void finalizeTask(TaskSpec task, int exitCode)
     throws IOException {
-        System.out.println("Received task completion notification: " + task);
-        if (exitCode != 0) {
-            System.out.println("Task exited with error code: " + exitCode);
+        if (exitCode == 0) {
+            logger.log(Level.INFO,
+                    "Received successful task completion notification: {0}",
+                    task);
+        } else {
+            logger.log(Level.WARNING, "Task exited with error code: {0}",
+                    exitCode);
         }
         activeTasks--;
 
