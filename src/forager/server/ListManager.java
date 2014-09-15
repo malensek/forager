@@ -142,4 +142,10 @@ public class ListManager {
 
         return allTasks;
     }
+
+    public void shutdown() {
+        taskListWriter.close();
+        completedListWriter.close();
+        failedListWriter.close();
+    }
 }
