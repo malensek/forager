@@ -25,6 +25,7 @@ public class ListManager {
     private static final Logger logger = Logger.getLogger("forager");
 
     private static final String COMPLETED_EXT = ".done";
+    private static final String FAILED_EXT = ".fail";
 
     private String taskListName;
 
@@ -33,6 +34,9 @@ public class ListManager {
 
     private FileOutputStream completedListOut;
     private PrintWriter completedListWriter;
+
+    private FileOutputStream failedListOut;
+    private PrintWriter failedListWriter;
 
     public ListManager(String taskListName)
     throws IOException {
@@ -54,11 +58,29 @@ public class ListManager {
     }
 
     public void addTask(String command) {
+    private void createFailedWriter()
+    throws IOException {
+        String failedName = taskListName + FAILED_EXT;
+        failedListOut = new FileOutputStream(failedName, append);
+        failedListWriter = new PrintWriter(
+                new BufferedOutputStream(failedListOut));
+    }
         taskListWriter.println(command);
     }
 
     public void addCompletedTask(String command) {
         completedListWriter.println(command);
+    }
+
+    public void addFailedTask(String command)
+    throws IOException {
+        if (failedListWriter == null) {
+            createFailedWriter();
+        }
+
+        failedListWriter.println(command);
+        failedListWriter.flush();
+        failedListOut.getFD().sync();
     }
 
     public void syncTasks()
