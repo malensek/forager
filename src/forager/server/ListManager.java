@@ -28,6 +28,7 @@ public class ListManager {
     private static final String FAILED_EXT = ".fail";
 
     private String taskListName;
+    private boolean append;
 
     private FileOutputStream taskListOut;
     private PrintWriter taskListWriter;
@@ -46,18 +47,24 @@ public class ListManager {
     public ListManager(String taskListName, boolean append)
     throws IOException {
         this.taskListName = taskListName;
+        this.append = append;
+    }
 
+    private void createTaskWriter()
+    throws IOException {
         taskListOut = new FileOutputStream(taskListName, append);
         taskListWriter = new PrintWriter(
                 new BufferedOutputStream(taskListOut));
+    }
 
+    private void createCompletedWriter()
+    throws IOException {
         String completedName = taskListName + COMPLETED_EXT;
         completedListOut = new FileOutputStream(completedName, append);
         completedListWriter = new PrintWriter(
                 new BufferedOutputStream(completedListOut));
     }
 
-    public void addTask(String command) {
     private void createFailedWriter()
     throws IOException {
         String failedName = taskListName + FAILED_EXT;
@@ -65,10 +72,22 @@ public class ListManager {
         failedListWriter = new PrintWriter(
                 new BufferedOutputStream(failedListOut));
     }
+
+    public void addTask(String command)
+    throws IOException {
+        if (taskListWriter == null) {
+            createTaskWriter();
+        }
+
         taskListWriter.println(command);
     }
 
-    public void addCompletedTask(String command) {
+    public void addCompletedTask(String command)
+    throws IOException {
+        if (completedListWriter == null) {
+            createCompletedWriter();
+        }
+
         completedListWriter.println(command);
     }
 
