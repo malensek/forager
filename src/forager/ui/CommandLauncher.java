@@ -25,7 +25,13 @@ software, even if advised of the possibility of such damage.
 
 package forager.ui;
 
+/**
+ * This interface defines a uniform method for launching command line 'commands'
+ * --- for example, 'forager server' would be handled by a specific
+ *  CommandLauncher implementation tasked with starting up a server daemon.
+ *
+ * @author malensek
+ */
 public interface CommandLauncher {
-
     public void launch() throws Exception;
 }

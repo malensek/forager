@@ -30,6 +30,9 @@ import com.beust.jcommander.Parameters;
 
 import forager.server.Overlord;
 
+/**
+ * Launches a Forager server daemon.
+ */
 @Parameters(separators = "=",
         commandDescription = "Starts a forager master server")
 public class Server implements CommandLauncher {
