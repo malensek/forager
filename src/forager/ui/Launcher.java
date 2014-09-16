@@ -29,6 +29,14 @@ import java.util.Map;
 
 import com.beust.jcommander.JCommander;
 
+/**
+ * Provides an executable entry point to Forager (this is the jar 'main' class).
+ * Command line argument parsing is performed here, and then passed off to a
+ * {@link CommandLauncher} instance for processing (usually instantiating and
+ * initializing a particular class with the provided parameters).
+ *
+ * @author malensek
+ */
 public class Launcher {
 
     private static JCommander jc;
