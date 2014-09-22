@@ -37,6 +37,8 @@ public interface CommandLauncher {
     /**
      * Launches the command. This includes setting options, instantiating the
      * necessary classes, etc.
+     *
+     * @throws Exception if problems occur launching the command.
      */
     public void launch() throws Exception;
 
