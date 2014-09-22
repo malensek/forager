@@ -33,5 +33,11 @@ package forager.ui;
  * @author malensek
  */
 public interface CommandLauncher {
+
+    /**
+     * Launches the command. This includes setting options, instantiating the
+     * necessary classes, etc.
+     */
     public void launch() throws Exception;
+
 }

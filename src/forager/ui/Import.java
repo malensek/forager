@@ -36,6 +36,9 @@ import forager.client.Importer;
 
 import galileo.net.NetworkDestination;
 
+/**
+ * Handles importing new tasks from the command line.
+ */
 @Parameters(separators = "=", commandDescription = "Imports and submits "
         + "tasks to a server (from files or stdin)")
 public class Import implements CommandLauncher {

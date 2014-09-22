@@ -35,6 +35,10 @@ import forager.client.Forager;
 
 import galileo.net.NetworkDestination;
 
+/**
+ * Manages options and startup parameters for Forager client daemons launched
+ * from the command line.
+ */
 @Parameters(separators = "=",
         commandDescription = "Starts a forager client")
 public class Client implements CommandLauncher {
