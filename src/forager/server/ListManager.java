@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 /**
  * Handles the active and completed task lists and allows them to be flushed
- * and synced to disk.
+ * and synced to disk.  Each of the lists being managed are created on demand.
  *
  * @author malensek
  */
@@ -95,6 +95,10 @@ public class ListManager {
         completedListWriter.println(command);
     }
 
+    /**
+     * Adds a task string to the failed task list. This operation syncs every
+     * time to ensure we don't lose any tasks that failed.
+     */
     public void addFailedTask(String command)
     throws IOException {
         if (failedListWriter == null) {
@@ -106,18 +110,34 @@ public class ListManager {
         failedListOut.getFD().sync();
     }
 
+    /**
+     * Syncs the task list to disk. This should be called after a set of
+     * additions to the task list has completed. Once this method returns, the
+     * transaction is complete.
+     */
     public void syncTasks()
     throws IOException {
         taskListWriter.flush();
         taskListOut.getFD().sync();
     }
 
+    /**
+     * Syncs the completed list to disk. This should be called after a set of
+     * additions to the completed list has finished. Once this method returns,
+     * the transaction is complete.
+     */
     public void syncCompleted()
     throws IOException {
         completedListWriter.flush();
         completedListOut.getFD().sync();
     }
 
+    /**
+     * Reads the master task list and then the list of completed tasks and
+     * returns pending (incomplete) tasks.
+     *
+     * @return a List containing task strings that have not yet been completed.
+     */
     public List<String> readPendingTasks()
     throws IOException {
         File taskFile = new File(this.taskListName);
@@ -148,6 +168,9 @@ public class ListManager {
         return allTasks;
     }
 
+    /**
+     * Closes down the output streams for this ListManager.
+     */
     public void shutdown() {
         taskListWriter.close();
         completedListWriter.close();
