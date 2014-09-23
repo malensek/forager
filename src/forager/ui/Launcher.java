@@ -77,6 +77,8 @@ public class Launcher {
             } else {
                 usage(e.getMessage());
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
