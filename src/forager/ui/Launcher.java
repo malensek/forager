@@ -94,7 +94,7 @@ public class Launcher {
             sb.append(message + nl);
         }
 
-        sb.append("Usage: " + appName + " command [command options]" + nl);
+        sb.append("Usage: " + appName + " command [command options]" + nl + nl);
 
         Map<String, JCommander> commands = jc.getCommands();
         for (String cmd : commands.keySet()) {
