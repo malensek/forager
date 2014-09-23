@@ -120,12 +120,19 @@ public class ListManager {
 
     public List<String> readPendingTasks()
     throws IOException {
-        if (listsExist() != true) {
+        File taskFile = new File(this.taskListName);
+        if (taskFile.exists() == false) {
             return new ArrayList<>();
         }
 
         List<String> allTasks = Files.readAllLines(
                 Paths.get(this.taskListName), Charset.defaultCharset());
+
+        File completedFile = new File(this.completedListName);
+        if (completedFile.exists() == false) {
+            return allTasks;
+        }
+
         List<String> completedTasks = Files.readAllLines(
                 Paths.get(this.taskListName + COMPLETED_EXT));
 
