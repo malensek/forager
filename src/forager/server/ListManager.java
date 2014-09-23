@@ -114,12 +114,6 @@ public class ListManager {
         completedListOut.getFD().sync();
     }
 
-    public boolean listsExist() {
-        File listFile = new File(this.taskListName);
-        File doneFile = new File(this.taskListName + COMPLETED_EXT);
-        return (listFile.exists() || doneFile.exists());
-    }
-
     public List<String> readPendingTasks()
     throws IOException {
         if (listsExist() != true) {
