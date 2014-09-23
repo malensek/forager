@@ -28,6 +28,8 @@ public class ListManager {
     private static final String FAILED_EXT = ".fail";
 
     private String taskListName;
+    private String completedListName;
+    private String failedListName;
     private boolean append;
 
     private FileOutputStream taskListOut;
@@ -47,6 +49,8 @@ public class ListManager {
     public ListManager(String taskListName, boolean append)
     throws IOException {
         this.taskListName = taskListName;
+        this.completedListName = taskListName + COMPLETED_EXT;
+        this.failedListName = taskListName + FAILED_EXT;
         this.append = append;
     }
 
