@@ -28,6 +28,7 @@ package forager.ui;
 import java.util.Map;
 
 import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
 
 /**
  * Provides an executable entry point to Forager (this is the jar 'main' class).
@@ -69,7 +70,7 @@ public class Launcher {
             CommandLauncher cl = (CommandLauncher) command.getObjects().get(0);
             cl.launch();
 
-        } catch (Exception e) {
+        } catch (ParameterException e) {
             if (jc.getParsedCommand() != null) {
                 JCommander cmd = cmds.get(jc.getParsedCommand());
                 usage(cmd, e.getMessage());
