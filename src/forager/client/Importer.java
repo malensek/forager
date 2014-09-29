@@ -18,6 +18,12 @@ import galileo.event.EventReactor;
 import galileo.net.ClientMessageRouter;
 import galileo.net.NetworkDestination;
 
+/**
+ * Imports task data from a task list file and submits it to a given Forager
+ * server daemon.
+ *
+ * @author malensek
+ */
 public class Importer {
 
     private ForagerEventMap eventMap = new ForagerEventMap();
