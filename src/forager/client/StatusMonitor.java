@@ -3,6 +3,12 @@ package forager.client;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+/**
+ * Monitors currently running tasks and decides when new tasks should be
+ * requested based on current processing directives.
+ *
+ * @author malensek
+ */
 public class StatusMonitor implements Runnable {
 
     private static final Logger logger = Logger.getLogger("forager");
