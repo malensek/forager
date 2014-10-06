@@ -13,6 +13,7 @@ public class StatusMonitor implements Runnable {
 
     private static final Logger logger = Logger.getLogger("forager");
 
+    /** Maximum number of concurrent tasks */
     int maxActive = 4;
 
     boolean online;
