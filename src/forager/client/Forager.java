@@ -42,6 +42,13 @@ import galileo.event.EventReactor;
 import galileo.net.ClientMessageRouter;
 import galileo.net.NetworkDestination;
 
+/**
+ * Implements a Forager client daemon. The daemon is responsible for requesting
+ * tasks when processing directives are met, monitoring their execution, and
+ * notifying the server when they are complete.
+ *
+ * @author malensek
+ */
 public class Forager {
 
     private static final Logger logger = Logger.getLogger("forager");
