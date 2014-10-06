@@ -120,7 +120,7 @@ public class Forager {
         return pendingRequests;
     }
 
-    public int getMaxTasks() {
+    protected int getMaxTasks() {
         return maxTasks;
     }
 
