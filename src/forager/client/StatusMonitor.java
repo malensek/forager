@@ -17,23 +17,23 @@ public class StatusMonitor implements Runnable {
     int maxActive = 4;
 
     boolean online;
+    private Forager clientInstance;
 
-    private Forager forager;
-
-    public StatusMonitor(Forager forager) {
-        this.forager = forager;
-        this.maxActive = forager.getMaxTasks();
+    public StatusMonitor(Forager clientInstance) {
+        this.clientInstance = clientInstance;
+        this.maxActive = clientInstance.getMaxTasks();
     }
 
     public void run() {
         online = true;
 
         while (online) {
-            int active = forager.getNumActive() + forager.getNumPending();
+            int active = clientInstance.getNumActive()
+                + clientInstance.getNumPending();
             if (active < maxActive) {
                 int numTasks = maxActive - active;
                 try {
-                    forager.submitTaskRequest(numTasks);
+                    clientInstance.submitTaskRequest(numTasks);
                 } catch (IOException e) {
                     System.out.println("Failed to submit task request!");
                     e.printStackTrace();
