@@ -31,6 +31,11 @@ import galileo.event.Event;
 import galileo.serialization.SerializationInputStream;
 import galileo.serialization.SerializationOutputStream;
 
+/**
+ * Represents a request by a client daemon for tasks to execute.
+ *
+ * @author malensek
+ */
 public class TaskRequest implements Event {
 
     public int numTasks;

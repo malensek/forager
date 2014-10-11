@@ -34,6 +34,12 @@ import galileo.net.NetworkDestination;
 import galileo.serialization.SerializationInputStream;
 import galileo.serialization.SerializationOutputStream;
 
+/**
+ * Describes the details of a task: the identification number, command to run,
+ * etc.
+ *
+ * @author malensek
+ */
 public class TaskSpec implements Event {
 
     public long taskId;

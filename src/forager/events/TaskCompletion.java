@@ -31,6 +31,11 @@ import galileo.serialization.SerializationOutputStream;
 
 import java.io.IOException;
 
+/**
+ * Notifies the server of a task's completion.
+ *
+ * @author malensek
+ */
 public class TaskCompletion implements Event {
 
     public long taskId;
