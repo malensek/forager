@@ -29,6 +29,13 @@ import java.lang.ProcessBuilder.Redirect;
 
 import forager.events.TaskSpec;
 
+/**
+ * Encapsulates a Forager task process. The external process is created,
+ * standard output and input are redirected, and then the thread waits for the
+ * process to complete.
+ *
+ * @author malensek
+ */
 public class TaskThread implements Runnable {
 
     private TaskSpec task;
