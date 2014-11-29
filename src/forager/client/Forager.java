@@ -88,6 +88,14 @@ public class Forager {
         }
     }
 
+    /**
+     * Requests a number of tasks from the server. Note that the server is not
+     * required to supply the exact number of tasks requested, and in some cases
+     * may respond with no tasks.
+     *
+     * @param numTasks the number of individual tasks to request from the
+     * server.
+     */
     protected synchronized void submitTaskRequest(int numTasks)
     throws IOException {
         TaskRequest tr = new TaskRequest(numTasks);
@@ -95,6 +103,10 @@ public class Forager {
         messageRouter.sendMessage(server, eventReactor.wrapEvent(tr));
     }
 
+    /**
+     * This method is called by task threads to indicate a task completion,
+     * which also involves notifying the server of the task exit status.
+     */
     protected synchronized void finalizeTask(TaskSpec task, int exitCode)
     throws IOException {
         if (exitCode == 0) {
@@ -112,10 +124,17 @@ public class Forager {
         monitorThread.interrupt();
     }
 
+    /**
+     * Retrieves the number of active (executing) tasks.
+     */
     protected synchronized int getNumActive() {
         return activeTasks;
     }
 
+    /**
+     * Retrieves the number of pending task requests that have not yet been
+     * fulfilled by the server.
+     */
     protected synchronized int getNumPending() {
         return pendingRequests;
     }
