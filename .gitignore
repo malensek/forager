@@ -14,3 +14,4 @@ build.properties
 # Binaries
 forager-*.jar
 bin/forager
+/bin/
