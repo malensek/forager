@@ -51,7 +51,7 @@ public class Client implements Command {
             }
         }
 
-        String hostname = (String) nonOpts.get(1);
+        String hostname = (String) nonOpts.get(0);
         NetworkDestination server = new NetworkDestination(
                 hostname, port.value(opts));
         Forager client = new Forager(server, threads.value(opts));
