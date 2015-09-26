@@ -23,7 +23,12 @@ public class Launcher {
             for (int i = 0; i < argList.length; ++i) {
                 argList[i] = args[i + 1];
             }
-            cmd.execute(argList);
+            try {
+                cmd.execute(argList);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                cmd.printUsage();
+            }
         }
 
     }
