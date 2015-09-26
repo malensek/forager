@@ -2,6 +2,7 @@ package forager.newui;
 
 import static java.util.Arrays.asList;
 
+import java.io.IOException;
 import java.util.List;
 
 import forager.client.Forager;
@@ -16,9 +17,9 @@ public class Client implements Command {
 
     public static int DEFAULT_PORT = 53380;
 
-    public void execute(String[] args) throws Exception {
-        OptionParser parser = new OptionParser();
+    private OptionParser parser = new OptionParser();
 
+    public void execute(String[] args) throws Exception {
         OptionSpec<Integer> port = parser.acceptsAll(
                 asList("p", "port"), "Server port")
             .withRequiredArg()
@@ -33,14 +34,14 @@ public class Client implements Command {
             .ofType(Integer.class)
             .defaultsTo(cpus);
 
-        parser.nonOptions("Remote Hostname");
+        parser.nonOptions("server_hostname");
 
         OptionSet opts = parser.parse(args);
         List<?> nonOpts = opts.nonOptionArguments();
 
         if (nonOpts.size() <= 0) {
-            System.out.println("No remote hostname specified!");
-            parser.printHelpOn(System.out);
+            System.out.println("No server hostname specified!");
+            printUsage();
             return;
         }
 
@@ -60,5 +61,13 @@ public class Client implements Command {
 
     public String name() {
         return "client";
+    }
+
+    public void printUsage()
+    throws IOException {
+        System.out.println("Usage: forager " + name()
+                + " [options] server_hostname");
+        System.out.println();
+        parser.printHelpOn(System.out);
     }
 }
