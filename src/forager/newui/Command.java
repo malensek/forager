@@ -2,8 +2,9 @@ package forager.newui;
 
 interface Command {
 
-    public abstract void execute(String[] args) throws Exception;
+    public void execute(String[] args) throws Exception;
 
-    public abstract String name();
+    public String name();
 
+    public String usage();
 }
