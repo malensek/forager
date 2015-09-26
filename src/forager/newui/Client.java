@@ -2,6 +2,8 @@ package forager.newui;
 
 import static java.util.Arrays.asList;
 
+import java.util.List;
+
 import forager.client.Forager;
 
 import galileo.net.NetworkDestination;
@@ -10,7 +12,9 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-class Client implements Command {
+public class Client implements Command {
+
+    public static int DEFAULT_PORT = 53380;
 
     public void execute(String[] args) throws Exception {
         OptionParser parser = new OptionParser();
@@ -19,7 +23,7 @@ class Client implements Command {
                 asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
-            .defaultsTo(5555);
+            .defaultsTo(DEFAULT_PORT);
 
         int cpus = Runtime.getRuntime().availableProcessors();
         OptionSpec<Integer> threads = parser.acceptsAll(
@@ -29,18 +33,27 @@ class Client implements Command {
             .ofType(Integer.class)
             .defaultsTo(cpus);
 
+        parser.nonOptions("Remote Hostname");
+
         OptionSet opts = parser.parse(args);
+        List<?> nonOpts = opts.nonOptionArguments();
 
-
-        for (Object s : opts.nonOptionArguments()) {
-            System.out.println(s);
+        if (nonOpts.size() <= 0) {
+            System.out.println("No remote hostname specified!");
+            parser.printHelpOn(System.out);
+            return;
         }
 
-        port.value(opts);
+        if (nonOpts.size() > 1) {
+            for (int i = 1; i < nonOpts.size(); ++i) {
+                System.out.println("Ignoring extra hostname parameter: "
+                        + nonOpts.get(i));
+            }
+        }
 
-        String host = "test";
+        String hostname = (String) nonOpts.get(1);
         NetworkDestination server = new NetworkDestination(
-                host, port.value(opts));
+                hostname, port.value(opts));
         Forager client = new Forager(server, threads.value(opts));
         client.start();
     }
@@ -48,5 +61,4 @@ class Client implements Command {
     public String name() {
         return "client";
     }
-
 }
