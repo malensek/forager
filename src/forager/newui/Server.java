@@ -32,4 +32,9 @@ public class Server implements Command {
 
         printUsage();
     }
+
+    public String name() {
+        return "server";
+    }
+
 }
