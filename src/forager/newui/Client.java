@@ -1,7 +1,5 @@
 package forager.newui;
 
-import static java.util.Arrays.asList;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +14,6 @@ import joptsimple.OptionSpec;
 
 public class Client implements Command {
 
-    public static int DEFAULT_PORT = 53380;
-
     private OptionParser parser = new OptionParser();
 
     public void execute(String[] args) throws Exception {
@@ -25,7 +21,7 @@ public class Client implements Command {
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
-            .defaultsTo(DEFAULT_PORT);
+            .defaultsTo(Server.DEFAULT_PORT);
 
         int cpus = Runtime.getRuntime().availableProcessors();
         OptionSpec<Integer> threads = parser.acceptsAll(
