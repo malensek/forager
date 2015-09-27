@@ -3,6 +3,7 @@ package forager.newui;
 import static java.util.Arrays.asList;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import forager.client.Forager;
@@ -21,14 +22,14 @@ public class Client implements Command {
 
     public void execute(String[] args) throws Exception {
         OptionSpec<Integer> port = parser.acceptsAll(
-                asList("p", "port"), "Server port")
+                Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
             .defaultsTo(DEFAULT_PORT);
 
         int cpus = Runtime.getRuntime().availableProcessors();
         OptionSpec<Integer> threads = parser.acceptsAll(
-                asList("t", "threads"),
+                Arrays.asList("t", "threads"),
                 "Maximum number of threads the forager daemon can use")
             .withRequiredArg()
             .ofType(Integer.class)
