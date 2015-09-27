@@ -37,4 +37,12 @@ public class Server implements Command {
         return "server";
     }
 
+    public void printUsage()
+    throws IOException {
+        System.out.println("Usage: forager " + name() + " [options]");
+        System.out.println();
+        parser.printHelpOn(System.out);
+    }
+
 }
+
