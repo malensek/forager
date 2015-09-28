@@ -1,10 +1,11 @@
 package forager.newui;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import forager.server.Overlord;
 import joptsimple.OptionParser;
+import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
 public class Server implements Command {
@@ -23,14 +24,19 @@ public class Server implements Command {
         OptionSpec<?> reset = parser.acceptsAll(
                 Arrays.asList("r", "reset"), "Reset (clear) the task list");
 
-        OptionSpec<File> taskList = parser.acceptsAll(
+        OptionSpec<String> taskList = parser.acceptsAll(
                 Arrays.asList("t", "tasklist", "task-list"),
                 "Path to the task list (created if it doesn't exist)")
             .withRequiredArg()
-            .ofType(File.class)
-            .defaultsTo(new File("./tasklist"));
+            .ofType(String.class)
+            .defaultsTo("./tasklist");
 
-        printUsage();
+        OptionSet opts = parser.parse(args);
+
+        boolean clear = opts.hasArgument(reset);
+        Overlord server = new Overlord(
+                port.value(opts), taskList.value(opts), clear);
+        server.start();
     }
 
     public String name() {
