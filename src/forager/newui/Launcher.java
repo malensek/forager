@@ -10,10 +10,12 @@ public class Launcher {
             printHelp();
         }
 
-        Client clientCommand = new Client();
+        Client clientCmd = new Client();
+        Server serverCmd = new Server();
 
         Map<String, Command> commands = new HashMap<>();
-        commands.put(clientCommand.name(), clientCommand);
+        commands.put(clientCmd.name(), clientCmd);
+        commands.put(serverCmd.name(), serverCmd);
 
         String commandName = args[0].toLowerCase();
 
