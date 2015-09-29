@@ -12,10 +12,12 @@ public class Launcher {
 
         Client clientCmd = new Client();
         Server serverCmd = new Server();
+        Import importCmd = new Import();
 
         Map<String, Command> commands = new HashMap<>();
         commands.put(clientCmd.name(), clientCmd);
         commands.put(serverCmd.name(), serverCmd);
+        commands.put(importCmd.name(), importCmd);
 
         String commandName = args[0].toLowerCase();
 
