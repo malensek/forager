@@ -1,4 +1,4 @@
-package forager.newui;
+package forager.ui;
 
 import java.io.IOException;
 

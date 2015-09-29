@@ -1,59 +1,53 @@
-/*
-Copyright (c) 2014, Colorado State University
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-This software is provided by the copyright holders and contributors "as is" and
-any express or implied warranties, including, but not limited to, the implied
-warranties of merchantability and fitness for a particular purpose are
-disclaimed. In no event shall the copyright holder or contributors be liable for
-any direct, indirect, incidental, special, exemplary, or consequential damages
-(including, but not limited to, procurement of substitute goods or services;
-loss of use, data, or profits; or business interruption) however caused and on
-any theory of liability, whether in contract, strict liability, or tort
-(including negligence or otherwise) arising in any way out of the use of this
-software, even if advised of the possibility of such damage.
-*/
-
 package forager.ui;
 
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.Parameters;
+import java.io.IOException;
+import java.util.Arrays;
 
 import forager.server.Overlord;
+import joptsimple.OptionParser;
+import joptsimple.OptionSet;
+import joptsimple.OptionSpec;
 
-/**
- * Launches a Forager server daemon.
- */
-@Parameters(separators = "=",
-        commandDescription = "Starts a forager master server")
-public class Server implements CommandLauncher {
+public class Server implements Command {
 
-    public static final int DEFAULT_PORT = 53380;
-    public static final String DEFAULT_TASKLIST = "./tasklist";
+    public static int DEFAULT_PORT = 53380;
 
-    @Parameter(names = { "-r", "--reset" },
-            description = "Reset (clear) the task list")
-    private boolean clear = false;
+    private OptionParser parser = new OptionParser();
 
-    @Parameter(names = { "-p", "--port" }, description = "Server port")
-    private int port = DEFAULT_PORT;
+    public void execute(String[] args) throws Exception {
+        OptionSpec<Integer> port = parser.acceptsAll(
+                Arrays.asList("p", "port"), "Server port")
+            .withRequiredArg()
+            .ofType(Integer.class)
+            .defaultsTo(DEFAULT_PORT);
 
-    @Parameter(names = { "-t", "--task-list", "--tasklist" },
-            description = "Path to the task list (created if it doesn't exist)")
-    private String taskList = DEFAULT_TASKLIST;
+        OptionSpec<?> reset = parser.acceptsAll(
+                Arrays.asList("r", "reset"), "Reset (clear) the task list");
 
-    @Override
-    public void launch() throws Exception {
-        Overlord server = new Overlord(port, taskList, clear);
+        OptionSpec<String> taskList = parser.acceptsAll(
+                Arrays.asList("t", "tasklist", "task-list"),
+                "Path to the task list (created if it doesn't exist)")
+            .withRequiredArg()
+            .ofType(String.class)
+            .defaultsTo("./tasklist");
+
+        OptionSet opts = parser.parse(args);
+
+        boolean clear = opts.hasArgument(reset);
+        Overlord server = new Overlord(
+                port.value(opts), taskList.value(opts), clear);
         server.start();
     }
+
+    public String name() {
+        return "server";
+    }
+
+    public void printUsage()
+    throws IOException {
+        System.out.println("Usage: forager " + name() + " [options]");
+        System.out.println();
+        parser.printHelpOn(System.out);
+    }
 }
+
