@@ -1,0 +1,43 @@
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+def projectName = 'forager'
+def projectVendor = 'Colorado State University'
+def version = '1.0'
+
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    compile name: 'galileo-net', version: '1.0'
+}
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}
+
+Map<String, String> jarAttributes = [
+        'Implementation-Title': projectName,
+        'Implementation-Vendor': projectVendor,
+        'Implementation-Version': version,
+        'Built-By': System.getProperty('user.name'),
+        'Build-Jdk': System.getProperty('java.version'),
+        'Main-Class': 'forager.ui.Launcher'
+]
+
+jar {
+    manifest {
+        attributes(jarAttributes)
+    }
+
+    from configurations.compile.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
+}
