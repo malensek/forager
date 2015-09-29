@@ -49,6 +49,5 @@ public class Server implements Command {
         System.out.println();
         parser.printHelpOn(System.out);
     }
-
 }
 
