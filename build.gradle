@@ -16,6 +16,7 @@ repositories {
 
 dependencies {
     compile name: 'galileo-net', version: '1.0'
+    compile group: 'net.sf.jopt-simple', name: 'jopt-simple', version: '4.9'
 }
 
 javadoc {
