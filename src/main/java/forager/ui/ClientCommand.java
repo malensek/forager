@@ -65,10 +65,15 @@ public class ClientCommand implements Command {
         return "client";
     }
 
+    public String description() {
+        return "Starts a forager client";
+    }
+
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " " + name()
                 + " [options] server_hostname");
+        System.out.println(description());
         System.out.println();
         parser.printHelpOn(System.out);
     }

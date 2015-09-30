@@ -48,10 +48,15 @@ public class ServerCommand implements Command {
         return "server";
     }
 
+    public String description() {
+        return "Starts a forager master server";
+    }
+
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " "
                 + name() + " [options]");
+        System.out.println(description());
         System.out.println();
         parser.printHelpOn(System.out);
     }

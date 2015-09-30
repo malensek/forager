@@ -50,11 +50,11 @@ public class Launcher {
             System.out.println();
             System.out.println("Commands");
             System.out.println("--------");
-            for (String cmdName : commands.keySet()) {
-                System.out.println(cmdName);
+            for (Command c : commands.values()) {
+                System.out.println(c.name() + "  -  " + c.description());
             }
             System.out.println();
-            System.exit(1);
+            return;
         }
 
 

@@ -40,6 +40,11 @@ public class HelpCommand implements Command {
         return "help";
     }
 
+    public String description() {
+        return "Provides command usage information";
+
+    }
+
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " "

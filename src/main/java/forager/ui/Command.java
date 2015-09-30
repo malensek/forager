@@ -8,5 +8,7 @@ interface Command {
 
     public String name();
 
+    public String description();
+
     public void printUsage() throws IOException;
 }

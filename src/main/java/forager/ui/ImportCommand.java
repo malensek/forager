@@ -72,10 +72,15 @@ public class ImportCommand implements Command {
         return "import";
     }
 
+    public String description() {
+        return "Imports and submits tasks to a server (from files or stdin)";
+    }
+
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " " + name()
                 + " file1 file2 ... fileN");
+        System.out.println(description());
         System.out.println();
         parser.printHelpOn(System.out);
     }
