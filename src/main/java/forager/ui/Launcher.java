@@ -10,9 +10,9 @@ public class Launcher {
             printHelp();
         }
 
-        Client clientCmd = new Client();
-        Server serverCmd = new Server();
-        Import importCmd = new Import();
+        ClientCommand clientCmd = new ClientCommand();
+        ServerCommand serverCmd = new ServerCommand();
+        ImportCommand importCmd = new ImportCommand();
 
         Map<String, Command> commands = new HashMap<>();
         commands.put(clientCmd.name(), clientCmd);

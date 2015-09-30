@@ -8,7 +8,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class Server implements Command {
+public class ServerCommand implements Command {
 
     public static int DEFAULT_PORT = 53380;
 

@@ -13,7 +13,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class Import implements Command {
+public class ImportCommand implements Command {
 
     private OptionParser parser = new OptionParser();
 
@@ -22,7 +22,7 @@ public class Import implements Command {
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
-            .defaultsTo(Server.DEFAULT_PORT);
+            .defaultsTo(ServerCommand.DEFAULT_PORT);
 
         OptionSpec<String> server = parser.acceptsAll(
                 Arrays.asList("s", "server"),

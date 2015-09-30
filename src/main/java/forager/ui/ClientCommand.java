@@ -12,7 +12,7 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
-public class Client implements Command {
+public class ClientCommand implements Command {
 
     private OptionParser parser = new OptionParser();
 
@@ -21,7 +21,7 @@ public class Client implements Command {
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
-            .defaultsTo(Server.DEFAULT_PORT);
+            .defaultsTo(ServerCommand.DEFAULT_PORT);
 
         int cpus = Runtime.getRuntime().availableProcessors();
         OptionSpec<Integer> threads = parser.acceptsAll(
