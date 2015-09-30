@@ -67,7 +67,7 @@ public class ClientCommand implements Command {
 
     public void printUsage()
     throws IOException {
-        System.out.println("Usage: forager " + name()
+        System.out.println("Usage: " + Launcher.APP_NAME + " " + name()
                 + " [options] server_hostname");
         System.out.println();
         parser.printHelpOn(System.out);

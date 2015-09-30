@@ -42,6 +42,7 @@ public class HelpCommand implements Command {
 
     public void printUsage()
     throws IOException {
-        System.out.println("Usage: forager " + name() + " command_name");
+        System.out.println("Usage: " + Launcher.APP_NAME + " "
+                + name() + " command_name");
     }
 }

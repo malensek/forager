@@ -50,9 +50,9 @@ public class ServerCommand implements Command {
 
     public void printUsage()
     throws IOException {
-        System.out.println("Usage: forager " + name() + " [options]");
+        System.out.println("Usage: " + Launcher.APP_NAME + " "
+                + name() + " [options]");
         System.out.println();
         parser.printHelpOn(System.out);
     }
 }
-
