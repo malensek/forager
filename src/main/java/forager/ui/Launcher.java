@@ -30,19 +30,33 @@ import java.util.Map;
 
 public class Launcher {
 
-    public static void main(String[] args) throws Exception {
-        if (args.length < 1) {
-            printHelp();
-        }
+    public static final String APP_NAME = "forager";
 
+    public static void main(String[] args) throws Exception {
         ClientCommand clientCmd = new ClientCommand();
         ServerCommand serverCmd = new ServerCommand();
         ImportCommand importCmd = new ImportCommand();
-
         Map<String, Command> commands = new HashMap<>();
         commands.put(clientCmd.name(), clientCmd);
         commands.put(serverCmd.name(), serverCmd);
         commands.put(importCmd.name(), importCmd);
+
+        HelpCommand helpCmd = new HelpCommand(commands);
+        commands.put(helpCmd.name(), helpCmd);
+
+        if (args.length < 1) {
+            System.out.println("Usage: " + APP_NAME
+                    + " command [command options]");
+            System.out.println();
+            System.out.println("Commands");
+            System.out.println("--------");
+            for (String cmdName : commands.keySet()) {
+                System.out.println(cmdName);
+            }
+            System.out.println();
+            System.exit(1);
+        }
+
 
         String commandName = args[0].toLowerCase();
 
@@ -59,11 +73,6 @@ public class Launcher {
                 cmd.printUsage();
             }
         }
-
-    }
-
-    private static void printHelp() {
-        System.out.println("usage: ...");
 
     }
 }
