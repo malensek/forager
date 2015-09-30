@@ -25,6 +25,7 @@ software, even if advised of the possibility of such damage.
 
 package forager.ui;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,34 +46,40 @@ public class Launcher {
         commands.put(helpCmd.name(), helpCmd);
 
         if (args.length < 1) {
-            System.out.println("Usage: " + APP_NAME
-                    + " command [command options]");
-            System.out.println();
-            System.out.println("Commands");
-            System.out.println("--------");
-            for (Command c : commands.values()) {
-                System.out.println(c.name() + "  -  " + c.description());
-            }
-            System.out.println();
-            return;
+            Launcher.printUsage(commands.values());
+            System.exit(1);
         }
-
 
         String commandName = args[0].toLowerCase();
-
         Command cmd = commands.get(commandName);
-        if (cmd != null) {
-            String[] argList = new String[args.length - 1];
-            for (int i = 0; i < argList.length; ++i) {
-                argList[i] = args[i + 1];
-            }
-            try {
-                cmd.execute(argList);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                cmd.printUsage();
-            }
+        if (cmd == null) {
+            System.out.println("Command not found: " + cmd);
+            printUsage(commands.values());
         }
 
+        int returnValue = -1;
+        String[] argList = new String[args.length - 1];
+        for (int i = 0; i < argList.length; ++i) {
+            argList[i] = args[i + 1];
+        }
+        try {
+            returnValue = cmd.execute(argList);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            cmd.printUsage();
+        }
+
+        System.exit(returnValue);
+    }
+
+    private static void printUsage(Collection<Command> commands) {
+        System.out.println("Usage: " + APP_NAME + " command [command options]");
+        System.out.println();
+        System.out.println("Commands");
+        System.out.println("--------");
+        for (Command c : commands) {
+            System.out.println(c.name() + "  -  " + c.description());
+        }
+        System.out.println();
     }
 }

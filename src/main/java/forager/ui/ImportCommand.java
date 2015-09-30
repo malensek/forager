@@ -37,7 +37,7 @@ public class ImportCommand implements Command {
         parser.nonOptions("files");
     }
 
-    public void execute(String[] args) throws Exception {
+    public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> files = opts.nonOptionArguments();
 
@@ -63,8 +63,10 @@ public class ImportCommand implements Command {
 
         if (result == true) {
             System.out.println("Import completed successfully!");
+            return 0;
         } else {
             System.out.println("Import rejected by the server.");
+            return 1;
         }
     }
 

@@ -36,12 +36,13 @@ public class ServerCommand implements Command {
             .defaultsTo("./tasklist");
     }
 
-    public void execute(String[] args) throws Exception {
+    public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         boolean clear = opts.hasArgument(reset);
         Overlord server = new Overlord(
                 port.value(opts), taskList.value(opts), clear);
         server.start();
+        return 0;
     }
 
     public String name() {

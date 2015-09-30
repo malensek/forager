@@ -4,7 +4,7 @@ import java.io.IOException;
 
 interface Command {
 
-    public void execute(String[] args) throws Exception;
+    public int execute(String[] args) throws Exception;
 
     public String name();
 

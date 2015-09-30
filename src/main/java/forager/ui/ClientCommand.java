@@ -37,14 +37,14 @@ public class ClientCommand implements Command {
         parser.nonOptions("server_hostname");
     }
 
-    public void execute(String[] args) throws Exception {
+    public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> nonOpts = opts.nonOptionArguments();
 
         if (nonOpts.size() <= 0) {
             System.out.println("No server hostname specified!");
             printUsage();
-            return;
+            return 1;
         }
 
         if (nonOpts.size() > 1) {
@@ -59,6 +59,7 @@ public class ClientCommand implements Command {
                 hostname, port.value(opts));
         Forager client = new Forager(server, threads.value(opts));
         client.start();
+        return 0;
     }
 
     public String name() {

@@ -21,19 +21,21 @@ public class HelpCommand implements Command {
         this.commands = commands;
     }
 
-    public void execute(String[] args) throws Exception {
+    public int execute(String[] args) throws Exception {
         if (args.length <= 0) {
             printUsage();
-            return;
+            return 1;
         }
 
         Command cmd = commands.get(args[0]);
         if (cmd == null) {
             printUsage();
-            return;
+            return 1;
         }
 
         cmd.printUsage();
+
+        return 0;
     }
 
     public String name() {
