@@ -1,11 +1,5 @@
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
-
-def projectName = 'forager'
-def projectVendor = 'Colorado State University'
-def version = '1.0'
-
 
 repositories {
     mavenCentral()
@@ -25,9 +19,9 @@ javadoc {
 }
 
 Map<String, String> jarAttributes = [
-        'Implementation-Title': projectName,
-        'Implementation-Vendor': projectVendor,
-        'Implementation-Version': version,
+        'Implementation-Title': project.name,
+        'Implementation-Vendor': project.vendor,
+        'Implementation-Version': project.version,
         'Built-By': System.getProperty('user.name'),
         'Build-Jdk': System.getProperty('java.version'),
         'Main-Class': 'forager.ui.Launcher'
@@ -38,7 +32,30 @@ jar {
         attributes(jarAttributes)
     }
 
+    // Create a 'fat' jar
     from configurations.compile.collect {
         it.isDirectory() ? it : zipTree(it)
+    }
+}
+
+task binJar(dependsOn: jar) {
+    description("Creates a runnable 'binary' jar file")
+    inputs.files(
+        "${projectDir}/etc/bootstrap.sh",
+        files(jar).getSingleFile())
+    def binFile = new File("${buildDir}/${project.name}")
+    outputs.files(binFile)
+    outputs.dir(projectDir)
+
+    doLast {
+        binFile.write("")
+
+        inputs.files.each {
+            if (it.exists()) {
+                binFile.append(it.getBytes());
+            }
+        }
+
+        binFile.setExecutable(true, true)
     }
 }
