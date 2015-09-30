@@ -14,25 +14,30 @@ public class ServerCommand implements Command {
 
     private OptionParser parser = new OptionParser();
 
-    public void execute(String[] args) throws Exception {
-        OptionSpec<Integer> port = parser.acceptsAll(
+    private OptionSpec<Integer> port;
+    private OptionSpec<?> reset;
+    private OptionSpec<String> taskList;
+
+    public ServerCommand() {
+        port = parser.acceptsAll(
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
             .defaultsTo(DEFAULT_PORT);
 
-        OptionSpec<?> reset = parser.acceptsAll(
+        reset = parser.acceptsAll(
                 Arrays.asList("r", "reset"), "Reset (clear) the task list");
 
-        OptionSpec<String> taskList = parser.acceptsAll(
+        taskList = parser.acceptsAll(
                 Arrays.asList("t", "tasklist", "task-list"),
                 "Path to the task list (created if it doesn't exist)")
             .withRequiredArg()
             .ofType(String.class)
             .defaultsTo("./tasklist");
+    }
 
+    public void execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
-
         boolean clear = opts.hasArgument(reset);
         Overlord server = new Overlord(
                 port.value(opts), taskList.value(opts), clear);

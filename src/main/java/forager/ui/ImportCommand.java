@@ -17,14 +17,17 @@ public class ImportCommand implements Command {
 
     private OptionParser parser = new OptionParser();
 
-    public void execute(String[] args) throws Exception {
-        OptionSpec<Integer> port = parser.acceptsAll(
+    private OptionSpec<Integer> port;
+    private OptionSpec<String> server;
+
+    public ImportCommand() {
+        port = parser.acceptsAll(
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
             .defaultsTo(ServerCommand.DEFAULT_PORT);
 
-        OptionSpec<String> server = parser.acceptsAll(
+        server = parser.acceptsAll(
                 Arrays.asList("s", "server"),
                 "Server to submit imported tasks to")
             .withRequiredArg()
@@ -32,7 +35,9 @@ public class ImportCommand implements Command {
             .defaultsTo("localhost");
 
         parser.nonOptions("files");
+    }
 
+    public void execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> files = opts.nonOptionArguments();
 

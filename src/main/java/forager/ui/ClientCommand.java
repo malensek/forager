@@ -16,15 +16,18 @@ public class ClientCommand implements Command {
 
     private OptionParser parser = new OptionParser();
 
-    public void execute(String[] args) throws Exception {
-        OptionSpec<Integer> port = parser.acceptsAll(
+    private OptionSpec<Integer> port;
+    private OptionSpec<Integer> threads;
+
+    public ClientCommand() {
+        port = parser.acceptsAll(
                 Arrays.asList("p", "port"), "Server port")
             .withRequiredArg()
             .ofType(Integer.class)
             .defaultsTo(ServerCommand.DEFAULT_PORT);
 
         int cpus = Runtime.getRuntime().availableProcessors();
-        OptionSpec<Integer> threads = parser.acceptsAll(
+        threads = parser.acceptsAll(
                 Arrays.asList("t", "threads"),
                 "Maximum number of threads the forager daemon can use")
             .withRequiredArg()
@@ -32,7 +35,9 @@ public class ClientCommand implements Command {
             .defaultsTo(cpus);
 
         parser.nonOptions("server_hostname");
+    }
 
+    public void execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> nonOpts = opts.nonOptionArguments();
 
