@@ -36,11 +36,25 @@ import java.io.IOException;
  */
 interface Command {
 
+    /**
+     * Applies the command line arguments provided, and executes the command.
+     */
     public int execute(String[] args) throws Exception;
 
+    /**
+     * Retrieves the name of the command. This string allow users to call a
+     * specific command by name on the CLI.
+     */
     public String name();
 
+    /**
+     * A short (one line) description of the Command for contextual help
+     * purposes.
+     */
     public String description();
 
+    /**
+     * Prints usage information for this command on stdout.
+     */
     public void printUsage() throws IOException;
 }
