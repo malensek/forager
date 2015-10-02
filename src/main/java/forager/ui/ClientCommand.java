@@ -67,6 +67,7 @@ public class ClientCommand implements Command {
         parser.nonOptions("server_hostname");
     }
 
+    @Override
     public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> nonOpts = opts.nonOptionArguments();
@@ -92,14 +93,17 @@ public class ClientCommand implements Command {
         return 0;
     }
 
+    @Override
     public String name() {
         return "client";
     }
 
+    @Override
     public String description() {
         return "Starts a forager client";
     }
 
+    @Override
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " " + name()

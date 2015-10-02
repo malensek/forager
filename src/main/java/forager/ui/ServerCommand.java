@@ -67,6 +67,7 @@ public class ServerCommand implements Command {
             .defaultsTo("./tasklist");
     }
 
+    @Override
     public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         boolean clear = opts.hasArgument(reset);
@@ -76,14 +77,17 @@ public class ServerCommand implements Command {
         return 0;
     }
 
+    @Override
     public String name() {
         return "server";
     }
 
+    @Override
     public String description() {
         return "Starts a forager master server";
     }
 
+    @Override
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " "

@@ -68,6 +68,7 @@ public class ImportCommand implements Command {
         parser.nonOptions("files");
     }
 
+    @Override
     public int execute(String[] args) throws Exception {
         OptionSet opts = parser.parse(args);
         List<?> files = opts.nonOptionArguments();
@@ -101,14 +102,17 @@ public class ImportCommand implements Command {
         }
     }
 
+    @Override
     public String name() {
         return "import";
     }
 
+    @Override
     public String description() {
         return "Imports and submits tasks to a server (from files or stdin)";
     }
 
+    @Override
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " " + name()

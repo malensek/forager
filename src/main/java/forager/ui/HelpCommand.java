@@ -51,6 +51,7 @@ public class HelpCommand implements Command {
         this.commands = commands;
     }
 
+    @Override
     public int execute(String[] args) throws Exception {
         if (args.length <= 0) {
             printUsage();
@@ -69,14 +70,17 @@ public class HelpCommand implements Command {
     }
 
     public String name() {
+    @Override
         return "help";
     }
 
+    @Override
     public String description() {
         return "Provides command usage information";
 
     }
 
+    @Override
     public void printUsage()
     throws IOException {
         System.out.println("Usage: " + Launcher.APP_NAME + " "
