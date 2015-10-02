@@ -37,6 +37,11 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+/**
+ * Handles launching a Forager client from the command line interface.
+ *
+ * @author malensek
+ */
 public class ClientCommand implements Command {
 
     private OptionParser parser = new OptionParser();

@@ -33,6 +33,12 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+/**
+ * Launches a Forager master server. The server application manages task
+ * execution over the cluster.
+ *
+ * @author malensek
+ */
 public class ServerCommand implements Command {
 
     public static int DEFAULT_PORT = 53380;

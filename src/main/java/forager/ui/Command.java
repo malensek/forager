@@ -27,6 +27,13 @@ package forager.ui;
 
 import java.io.IOException;
 
+/**
+ * Defines an interface for commands in the Forager CLI. Commands are
+ * responsible for parsing arguments and setting up whatever objects they need
+ * to execute their task.
+ *
+ * @author malensek
+ */
 interface Command {
 
     public int execute(String[] args) throws Exception;

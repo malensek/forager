@@ -38,6 +38,12 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+/**
+ * Handles task importing activities; users provide the importer with a list of
+ * tasks that need to be run by the system.
+ *
+ * @author malensek
+ */
 public class ImportCommand implements Command {
 
     private OptionParser parser = new OptionParser();

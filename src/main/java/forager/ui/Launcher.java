@@ -29,6 +29,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Main UI entry point; consumes incoming command line arguments and then passes
+ * them to the appropriate {@link Command} instances.
+ *
+ * @author malensek
+ */
 public class Launcher {
 
     public static final String APP_NAME = "forager";

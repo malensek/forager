@@ -38,6 +38,11 @@ import joptsimple.OptionParser;
 import joptsimple.OptionSet;
 import joptsimple.OptionSpec;
 
+/**
+ * This command retrieves usage information for other commands.
+ *
+ * @author malensek
+ */
 public class HelpCommand implements Command {
 
     Map<String, Command> commands;
