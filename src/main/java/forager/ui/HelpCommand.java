@@ -69,8 +69,8 @@ public class HelpCommand implements Command {
         return 0;
     }
 
-    public String name() {
     @Override
+    public String name() {
         return "help";
     }
 
