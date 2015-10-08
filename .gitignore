@@ -1,7 +1,8 @@
 # Eclipse files
-.project
-.classpath
-.build
+/bin
+/.classpath
+/.project
+/.settings
 
 # Local dev files
 classes
@@ -12,8 +13,3 @@ build.properties
 
 # Mac OS File Attributes
 .DS_Store
-
-# Binaries
-forager-*.jar
-bin/forager
-/bin/
