@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import galileo.event.Event;
-import galileo.serialization.SerializationInputStream;
-import galileo.serialization.SerializationOutputStream;
+import io.elssa.event.Event;
+import io.elssa.serialization.SerializationInputStream;
+import io.elssa.serialization.SerializationOutputStream;
 
 public class ImportRequest implements Event {
 

@@ -27,9 +27,9 @@ package forager.events;
 
 import java.io.IOException;
 
-import galileo.event.Event;
-import galileo.serialization.SerializationInputStream;
-import galileo.serialization.SerializationOutputStream;
+import io.elssa.event.Event;
+import io.elssa.serialization.SerializationInputStream;
+import io.elssa.serialization.SerializationOutputStream;
 
 /**
  * Represents a request by a client daemon for tasks to execute.

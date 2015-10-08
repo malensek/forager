@@ -31,7 +31,7 @@ import java.util.List;
 
 import forager.client.Forager;
 
-import galileo.net.NetworkDestination;
+import io.elssa.net.NetworkEndpoint;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -86,7 +86,7 @@ public class ClientCommand implements Command {
         }
 
         String hostname = (String) nonOpts.get(0);
-        NetworkDestination server = new NetworkDestination(
+        NetworkEndpoint server = new NetworkEndpoint(
                 hostname, port.value(opts));
         Forager client = new Forager(server, threads.value(opts));
         client.start();

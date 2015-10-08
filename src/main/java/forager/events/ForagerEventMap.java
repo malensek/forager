@@ -25,7 +25,7 @@ software, even if advised of the possibility of such damage.
 
 package forager.events;
 
-import galileo.event.EventMap;
+import io.elssa.event.EventMap;
 
 public class ForagerEventMap extends EventMap {
 

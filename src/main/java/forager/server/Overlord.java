@@ -40,11 +40,11 @@ import forager.events.TaskCompletion;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
-import galileo.event.EventContext;
-import galileo.event.EventHandler;
-import galileo.event.EventReactor;
-import galileo.net.NetworkDestination;
-import galileo.net.ServerMessageRouter;
+import io.elssa.event.EventContext;
+import io.elssa.event.EventHandler;
+import io.elssa.event.EventReactor;
+import io.elssa.net.NetworkEndpoint;
+import io.elssa.net.ServerMessageRouter;
 
 public class Overlord {
 
@@ -196,7 +196,7 @@ public class Overlord {
         TaskSpec task = activeTasks.remove(completion.taskId);
         if (task.assignments.size() > 3) {
             permanentFailures++;
-            Iterator<NetworkDestination> it = task.assignments.iterator();
+            Iterator<NetworkEndpoint> it = task.assignments.iterator();
             logger.log(Level.SEVERE,
                     "Task {0} failed 3 times at {1}; {2}; {3}",
                     new Object[] {

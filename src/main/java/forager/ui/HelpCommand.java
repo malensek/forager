@@ -26,17 +26,7 @@ software, even if advised of the possibility of such damage.
 package forager.ui;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
-
-import forager.client.Forager;
-
-import galileo.net.NetworkDestination;
-
-import joptsimple.OptionParser;
-import joptsimple.OptionSet;
-import joptsimple.OptionSpec;
 
 /**
  * This command retrieves usage information for other commands.

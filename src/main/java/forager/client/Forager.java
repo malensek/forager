@@ -36,11 +36,11 @@ import forager.events.TaskCompletion;
 import forager.events.TaskRequest;
 import forager.events.TaskSpec;
 
-import galileo.event.EventContext;
-import galileo.event.EventHandler;
-import galileo.event.EventReactor;
-import galileo.net.ClientMessageRouter;
-import galileo.net.NetworkDestination;
+import io.elssa.event.EventContext;
+import io.elssa.event.EventHandler;
+import io.elssa.event.EventReactor;
+import io.elssa.net.ClientMessageRouter;
+import io.elssa.net.NetworkEndpoint;
 
 /**
  * Implements a Forager client daemon. The daemon is responsible for requesting
@@ -53,7 +53,7 @@ public class Forager {
 
     private static final Logger logger = Logger.getLogger("forager");
 
-    private NetworkDestination server;
+    private NetworkEndpoint server;
     private ClientMessageRouter messageRouter;
 
     private ForagerEventMap eventMap = new ForagerEventMap();
@@ -67,7 +67,7 @@ public class Forager {
     private int pendingRequests = 0;
     protected ExecutorService threadPool;
 
-    public Forager(NetworkDestination server, int threads) {
+    public Forager(NetworkEndpoint server, int threads) {
         this.server = server;
         this.maxTasks = threads;
         this.threadPool = Executors.newFixedThreadPool(threads);

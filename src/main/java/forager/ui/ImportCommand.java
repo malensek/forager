@@ -32,7 +32,7 @@ import java.util.List;
 
 import forager.client.Importer;
 
-import galileo.net.NetworkDestination;
+import io.elssa.net.NetworkEndpoint;
 
 import joptsimple.OptionParser;
 import joptsimple.OptionSet;
@@ -90,7 +90,7 @@ public class ImportCommand implements Command {
             throw new Exception("No input files specified or data from stdin.");
         }
 
-        boolean result = i.submitTasks(new NetworkDestination(
+        boolean result = i.submitTasks(new NetworkEndpoint(
                     server.value(opts), port.value(opts)));
 
         if (result == true) {

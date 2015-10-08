@@ -25,11 +25,11 @@ software, even if advised of the possibility of such damage.
 
 package forager.events;
 
-import galileo.event.Event;
-import galileo.serialization.SerializationInputStream;
-import galileo.serialization.SerializationOutputStream;
-
 import java.io.IOException;
+
+import io.elssa.event.Event;
+import io.elssa.serialization.SerializationInputStream;
+import io.elssa.serialization.SerializationOutputStream;
 
 /**
  * Notifies the server of a task's completion.

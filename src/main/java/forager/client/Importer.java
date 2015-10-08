@@ -37,11 +37,11 @@ import forager.events.ForagerEventMap;
 import forager.events.ImportRequest;
 import forager.events.ImportResponse;
 
-import galileo.event.EventContext;
-import galileo.event.EventHandler;
-import galileo.event.EventReactor;
-import galileo.net.ClientMessageRouter;
-import galileo.net.NetworkDestination;
+import io.elssa.event.EventContext;
+import io.elssa.event.EventHandler;
+import io.elssa.event.EventReactor;
+import io.elssa.net.ClientMessageRouter;
+import io.elssa.net.NetworkEndpoint;
 
 /**
  * Imports task data from a task list file and submits it to a given Forager
@@ -58,7 +58,7 @@ public class Importer {
 
     private boolean successful;
 
-    public boolean submitTasks(NetworkDestination server)
+    public boolean submitTasks(NetworkEndpoint server)
     throws Exception {
         ClientMessageRouter messageRouter = new ClientMessageRouter();
         messageRouter.addListener(eventReactor);

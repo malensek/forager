@@ -29,10 +29,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import galileo.event.Event;
-import galileo.net.NetworkDestination;
-import galileo.serialization.SerializationInputStream;
-import galileo.serialization.SerializationOutputStream;
+import io.elssa.event.Event;
+import io.elssa.net.NetworkEndpoint;
+import io.elssa.serialization.SerializationInputStream;
+import io.elssa.serialization.SerializationOutputStream;
 
 /**
  * Describes the details of a task: the identification number, command to run,
@@ -44,7 +44,7 @@ public class TaskSpec implements Event {
 
     public long taskId;
     public String command;
-    public List<NetworkDestination> assignments = new ArrayList<>();
+    public List<NetworkEndpoint> assignments = new ArrayList<>();
 
     public TaskSpec(long taskId, String command) {
         this.taskId = taskId;
