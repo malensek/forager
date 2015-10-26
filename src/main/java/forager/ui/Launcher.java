@@ -61,6 +61,7 @@ public class Launcher {
         if (cmd == null) {
             System.out.println("Command not found: " + cmd);
             printUsage(commands.values());
+            System.exit(1);
         }
 
         int returnValue = -1;
