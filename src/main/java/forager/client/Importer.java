@@ -39,6 +39,7 @@ import forager.events.ImportResponse;
 
 import io.elssa.event.EventContext;
 import io.elssa.event.EventHandler;
+import io.elssa.event.EventLinkException;
 import io.elssa.event.EventReactor;
 import io.elssa.net.ClientMessageRouter;
 import io.elssa.net.NetworkEndpoint;
@@ -52,7 +53,7 @@ import io.elssa.net.NetworkEndpoint;
 public class Importer {
 
     private ForagerEventMap eventMap = new ForagerEventMap();
-    private EventReactor eventReactor = new EventReactor(this, eventMap);
+    private EventReactor eventReactor;
 
     private List<String> tasks = new ArrayList<>();
 
@@ -60,6 +61,7 @@ public class Importer {
 
     public boolean submitTasks(NetworkEndpoint server)
     throws Exception {
+        eventReactor = new EventReactor(this, eventMap);
         ClientMessageRouter messageRouter = new ClientMessageRouter();
         messageRouter.addListener(eventReactor);
         ImportRequest request = new ImportRequest(tasks);
