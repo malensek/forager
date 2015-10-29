@@ -95,8 +95,7 @@ public class ListManager {
 
     private void createFailedWriter()
     throws IOException {
-        String failedName = taskListName + FAILED_EXT;
-        failedListOut = new FileOutputStream(failedName, append);
+        failedListOut = new FileOutputStream(failedListName, append);
         failedListWriter = new PrintWriter(
                 new BufferedOutputStream(failedListOut));
     }
@@ -178,7 +177,8 @@ public class ListManager {
         }
 
         List<String> completedTasks = Files.readAllLines(
-                Paths.get(this.taskListName + COMPLETED_EXT));
+                Paths.get(this.taskListName + COMPLETED_EXT),
+                Charset.defaultCharset());
 
         for (String command : completedTasks) {
             boolean result = allTasks.remove(command);
