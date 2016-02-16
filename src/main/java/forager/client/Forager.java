@@ -38,6 +38,7 @@ import forager.events.TaskSpec;
 
 import io.elssa.event.EventContext;
 import io.elssa.event.EventHandler;
+import io.elssa.event.EventLinkException;
 import io.elssa.event.EventReactor;
 import io.elssa.net.ClientMessageRouter;
 import io.elssa.net.NetworkEndpoint;
@@ -57,7 +58,7 @@ public class Forager {
     private ClientMessageRouter messageRouter;
 
     private ForagerEventMap eventMap = new ForagerEventMap();
-    private EventReactor eventReactor = new EventReactor(this, eventMap);
+    private EventReactor eventReactor;
 
     private StatusMonitor monitor;
     private Thread monitorThread;
@@ -67,7 +68,9 @@ public class Forager {
     private int pendingRequests = 0;
     protected ExecutorService threadPool;
 
-    public Forager(NetworkEndpoint server, int threads) {
+    public Forager(NetworkEndpoint server, int threads)
+    throws EventLinkException {
+        this.eventReactor = new EventReactor(this, eventMap);
         this.server = server;
         this.maxTasks = threads;
         this.threadPool = Executors.newFixedThreadPool(threads);

@@ -42,6 +42,7 @@ import forager.events.TaskSpec;
 
 import io.elssa.event.EventContext;
 import io.elssa.event.EventHandler;
+import io.elssa.event.EventLinkException;
 import io.elssa.event.EventReactor;
 import io.elssa.net.NetworkEndpoint;
 import io.elssa.net.ServerMessageRouter;
@@ -54,7 +55,7 @@ public class Overlord {
     private ServerMessageRouter messageRouter;
 
     private ForagerEventMap eventMap = new ForagerEventMap();
-    private EventReactor eventReactor = new EventReactor(this, eventMap);
+    private EventReactor eventReactor;
 
     private ListManager listManager;
 
@@ -66,13 +67,14 @@ public class Overlord {
     private Map<Long, TaskSpec> activeTasks = new HashMap<>();
 
     public Overlord(int port, String taskList)
-    throws IOException {
+    throws EventLinkException, IOException {
         this(port, taskList, false);
     }
 
     public Overlord(int port, String taskList, boolean resetList)
-    throws IOException {
+    throws EventLinkException, IOException {
         this.port = port;
+        this.eventReactor = new EventReactor(this, eventMap);
 
         boolean append = !(resetList);
         listManager = new ListManager(taskList, append);
